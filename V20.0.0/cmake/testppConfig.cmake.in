@@ -1,3 +1,7 @@
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/testerTargets.cmake")
+include(CMakeFindDependencyMacro)
+
+find_dependency(Threads)
+
+include("${CMAKE_CURRENT_LIST_DIR}/testppTargets.cmake")

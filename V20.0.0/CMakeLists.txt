@@ -57,8 +57,10 @@ target_precompile_headers(testpp PRIVATE
 
 target_compile_features(testpp PUBLIC cxx_std_20)
 
-target_include_directories(testpp PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(testpp
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(testpp PUBLIC Threads::Threads)

@@ -1,6 +1,6 @@
-#include <tester/internal/PCH/pch.hpp>
+#include <testpp/internal/PCH/pch.hpp>
 
-#include <tester/internal/Main.hpp>
+#include <testpp/internal/Main.hpp>
 #include <algorithm>
 #include <iostream>
 #include <thread>
