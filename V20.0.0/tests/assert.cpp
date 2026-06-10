@@ -1,6 +1,6 @@
-#include <tester/Tests.hpp>
-#include <tester/internal/Core.hpp>
-#include <tester/internal/Runner.hpp>
+#include <testpp/testpp.hpp>
+#include <testpp/internal/Core.hpp>
+#include <testpp/internal/Runner.hpp>
 
 TEST(intentionally_fail_assert, short_circuit_check) {
     //Create a temporary NON REGISTERED test
