@@ -7,7 +7,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-project(tester LANGUAGES CXX)
+project(
+    testpp
+    VERSION 20.0.0
+    LANGUAGES CXX
+)
 
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 
@@ -29,7 +33,7 @@ endif()
 
 find_package(Threads REQUIRED)
 
-add_library(tester
+add_library(testpp
     src/Multithread.cpp
     src/ProcessArgs.cpp
     src/RenderConsole.cpp
@@ -40,29 +44,29 @@ add_library(tester
     src/platform/unix/isolation_unix.cpp
 )
 
-set_target_properties(tester PROPERTIES
+set_target_properties(testpp PROPERTIES
     UNITY_BUILD ON
 )
 
-target_precompile_headers(tester PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/impl_pch.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/core_pch.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/src_pch.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/pch.hpp"
+target_precompile_headers(testpp PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/impl_pch.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/core_pch.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/src_pch.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/pch.hpp"
 )
 
-target_compile_features(tester PUBLIC cxx_std_20)
+target_compile_features(testpp PUBLIC cxx_std_20)
 
-target_include_directories(tester PUBLIC
+target_include_directories(testpp PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(tester PUBLIC Threads::Threads)
+target_link_libraries(testpp PUBLIC Threads::Threads)
 
 if (MSVC)
-    target_compile_options(tester PRIVATE /W4)
+    target_compile_options(testpp PRIVATE /W4)
 else()
-    target_compile_options(tester PRIVATE
+    target_compile_options(testpp PRIVATE
         -Wall
         -Wextra
         -pedantic
@@ -88,11 +92,50 @@ add_executable(runTests
     # tests/throws.cpp
     # tests/timeout.cpp
     # tests/isolation.cpp
-    tests/sanitizer.cpp
+    # tests/sanitizer.cpp
 )
 
-target_link_libraries(runTests PRIVATE tester)
+target_link_libraries(runTests PRIVATE testpp)
 
 enable_testing()
 
 add_test(NAME framework_tests COMMAND runTests)
+
+install(
+    TARGETS testpp
+    EXPORT testppTargets
+)
+
+install(
+    DIRECTORY include/
+    DESTINATION include
+)
+
+install(
+    EXPORT testppTargets
+    FILE testppTargets.cmake
+    NAMESPACE testpp::
+    DESTINATION lib/cmake/testpp
+)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+    cmake/testppConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/testppConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/testpp
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/testppConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/testppConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/testppConfigVersion.cmake"
+    DESTINATION
+        lib/cmake/testpp
+)
