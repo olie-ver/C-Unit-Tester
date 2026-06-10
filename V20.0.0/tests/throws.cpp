@@ -1,4 +1,4 @@
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(Throws, BasicThrowsPass) {
     EXPECT_THROWS(throw std::runtime_error("err"));

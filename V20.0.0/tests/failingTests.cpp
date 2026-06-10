@@ -1,4 +1,4 @@
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(fail1) {
     EXPECT_FALSE(true);

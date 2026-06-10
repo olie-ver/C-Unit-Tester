@@ -1,4 +1,4 @@
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(example) {
     EXPECT_TRUE(true);

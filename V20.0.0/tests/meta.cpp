@@ -1,4 +1,4 @@
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <set>
 
 TEST(Meta, ExpectPassesBasic) {
