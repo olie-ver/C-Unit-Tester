@@ -1,8 +1,8 @@
-#include <tester/internal/PCH/pch.hpp>
+#include <testpp/internal/PCH/pch.hpp>
 
-#include <tester/internal/Renderer.hpp>
-#include <tester/internal/Escape.hpp>
-#include <tester/internal/Runner.hpp>
+#include <testpp/internal/Renderer.hpp>
+#include <testpp/internal/Escape.hpp>
+#include <testpp/internal/Runner.hpp>
 #include <fstream>
 
 /* Example json
