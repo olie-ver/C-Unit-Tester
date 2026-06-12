@@ -17,9 +17,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult stdoutContains(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -29,9 +27,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult stderrContains(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -41,9 +37,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult noStdout(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -53,9 +47,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult noStderr(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -65,9 +57,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult stdoutMatches(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -77,9 +67,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult stderrMatches(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;

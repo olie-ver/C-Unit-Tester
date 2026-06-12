@@ -46,16 +46,20 @@ namespace internal {
         std::unordered_set<Core::Test, Core::TestHash>& getAllTests();
 
         #ifdef _WIN32
-        /// @brief A vector of DeathTests (only for Windows usage)
-        std::vector<Core::DeathTest>& getDeathTests();
 
-        /// @brief Registers a death test
-        /// @return the death test's index (which is its id) in the vector
-        size_t registerDeathTest(std::function<void()> func);
+        struct DeathContext
+        {
+            bool childMode = false;
 
-        /// @brief Runs the death test with the associated id
-        /// @param id the death test's id
-        void runDeathTest(size_t id);
+            std::size_t targetTest = std::numeric_limits<std::size_t>::max();
+            std::size_t targetDeath = std::numeric_limits<std::size_t>::max();
+            std::size_t currentDeath = 0;
+        };
+
+        DeathContext& getDeathContext();
+
+        void runSingleTest(size_t testIndex);
+
         #endif
 
         /// @brief A set containing suites that should not be tested
@@ -72,7 +76,7 @@ namespace internal {
         /// @brief Adds a test to the registry under a test suite
         /// @param suite_name The name of the test suite the test is a part of 
         /// @param test The test
-        bool registerTest(const Core::Test& test);
+        bool registerTest(Core::Test& test);
 
         /// @brief Runs all tests added to REGISTRY
         /// @param run The TestRun to put the results in

@@ -17,9 +17,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult asanFailure(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -29,9 +27,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult ubsanFailure(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -41,9 +37,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult tsanFailure(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -53,9 +47,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult lsanFailure(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -65,9 +57,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult sanFailure(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;

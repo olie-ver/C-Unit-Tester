@@ -165,6 +165,10 @@ namespace internal {
         /// @brief The final struct for a test's execution results
         struct TestResult
         {
+            #ifdef _WIN32
+            size_t index;
+            #endif
+
             std::string suiteName;
             std::string testName;
 
@@ -196,6 +200,10 @@ namespace internal {
             std::string suite_name;
             std::string test_name;
             std::function<void()> test;
+
+            #ifdef _WIN32
+            size_t index;
+            #endif
 
             bool operator==(const Test& other) const {
                 return suite_name == other.suite_name

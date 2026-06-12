@@ -6,6 +6,7 @@
 #include "../../Core.hpp"
 #include "../../Concepts.hpp"
 #include "../../Helpers.hpp"
+#include "../isolation_types.hpp"
 
 #ifdef _WIN32
     #include "../../Runner.hpp"
@@ -16,9 +17,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult success(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -28,9 +27,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult failure(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -40,9 +37,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult nonzeroExit(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -52,9 +47,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult exitCode(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -64,9 +57,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult completes(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;

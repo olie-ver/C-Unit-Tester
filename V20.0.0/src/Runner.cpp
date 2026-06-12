@@ -27,32 +27,29 @@ namespace internal {
         }
 
         #ifdef _WIN32
-        std::vector<Core::DeathTest>& getDeathTests() {
-            static std::vector<Core::DeathTest> instance;
-            return instance;
+
+        DeathContext& getDeathContext()
+        {
+            static DeathContext ctx;
+            return ctx;
         }
 
-        std::size_t Runner::registerDeathTest(std::function<void()> func)
+        void Runner::runSingleTest(size_t testIndex)
         {
-            auto& tests = getDeathTests();
+            auto& registry = getRegistry();
 
-            const std::size_t id = tests.size();
-
-            tests.push_back({id, std::move(func)});
-
-            return id;
-        }
-
-        void Runner::runDeathTest(std::size_t id)
-        {
-            auto& tests = getDeathTests();
-
-            if (id >= tests.size()) {
-                std::abort();
+            for (auto& test : registry)
+            {
+                if (test.index == testIndex)
+                {
+                    runTest(test);
+                    return;
+                }
             }
-            
-            tests[id].func();
+
+            std::abort();
         }
+
         #endif
 
         std::unordered_set<std::string>& getSkipSuites() {
@@ -72,7 +69,7 @@ namespace internal {
             return skip.contains(suite_name) || (specific.size() != 0 && !specific.contains(suite_name));
         }
 
-        bool registerTest(const Core::Test& test)
+        bool registerTest(Core::Test& test)
         {
             auto& ALL_TESTS = getAllTests();
 
@@ -84,6 +81,10 @@ namespace internal {
             }
 
             std::vector<Core::Test>& REGISTRY = getRegistry();
+
+            #ifdef _WIN32
+            test.index = REGISTRY.size();
+            #endif
 
             REGISTRY.push_back(test);
             return true;
@@ -164,6 +165,11 @@ namespace internal {
             CURRENT_TEST.suiteName = test.suite_name;
             CURRENT_TEST.testName = test.test_name;
             CURRENT_TEST.test_status = Core::TestStatus::Passed;
+
+            #ifdef _WIN32
+                getDeathContext().currentDeath = 0;
+                CURRENT_TEST.index = test.index;
+            #endif
 
             using clock = std::chrono::steady_clock;
             using ms = std::chrono::milliseconds;

@@ -12,11 +12,36 @@
 namespace internal {
     namespace impl_iso {
         #ifdef _WIN32
-            Core::ExecutionResult runIsolatedImpl(size_t id, const int timeLimit);
 
-            inline Core::ExecutionResult isolateRun(size_t id, const int timeLimit = 10000)
+            Core::ExecutionResult runIsolatedImpl(size_t testIndex, size_t deathIndex, const int timeLimit);
+
+            inline Core::ExecutionResult isolateRun(size_t testIndex, size_t deathIndex, int timeLimit)
             {
-                return internal::impl_iso::runIsolatedImpl(id, timeLimit);
+                return internal::impl_iso::runIsolatedImpl(testIndex, deathIndex, timeLimit);
+            }
+
+            template<typename Func>
+            inline Core::ExecutionResult runDeathTest(Func&& func, const int timeLimit = 10000)
+            {
+                auto& ctx = internal::Runner::getDeathContext();
+
+                const std::size_t deathIndex = ctx.currentDeath++;
+
+                if (ctx.childMode)
+                {
+                    if (TEST_STACK.back().index == ctx.targetTest && deathIndex == ctx.targetDeath)
+                    {
+                        func();
+                    }
+
+                    return {};
+                }
+
+                return isolateRun(
+                    TEST_STACK.back().index,
+                    deathIndex,
+                    timeLimit
+                );
             }
         #else
             //The definition UNIX platforms must implement to 

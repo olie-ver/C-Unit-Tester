@@ -19,9 +19,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult death(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -31,9 +29,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult segfault(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -43,9 +39,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult abort(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -55,9 +49,7 @@ namespace internal {
         template<typename Func> 
         Core::ExecutionResult fatal(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;
@@ -67,9 +59,7 @@ namespace internal {
         template<typename Func> 
         Core::ExecutionResult nonFatal(Func&& func) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id);
-                return result;
+                return runDeathTest(std::forward<Func>(func));
             #else
                 Core::ExecutionResult result = isolateRun(func);
                 return result;

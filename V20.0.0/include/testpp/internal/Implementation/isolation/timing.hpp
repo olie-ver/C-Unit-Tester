@@ -17,9 +17,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult timeout(Func&& func, int timeLimitMs) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id, timeLimitMs);
-                return result;
+                return runDeathTest(std::forward<Func>(func), timeLimitMs);
             #else
                 Core::ExecutionResult result = isolateRun(func, timeLimitMs);
                 return result;
@@ -30,9 +28,7 @@ namespace internal {
         template<typename Func> 
         inline Core::ExecutionResult completesWithin(Func&& func, int timeLimitMs) {
             #ifdef _WIN32
-                size_t id = internal::Runner::registerDeathTest(func);
-                Core::ExecutionResult result = isolateRun(id, timeLimitMs);
-                return result;
+                return runDeathTest(std::forward<Func>(func), timeLimitMs);
             #else
                 Core::ExecutionResult result = isolateRun(func, timeLimitMs);
                 return result;
