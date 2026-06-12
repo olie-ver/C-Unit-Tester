@@ -1,9 +1,9 @@
-#include <tester/internal/PCH/pch.hpp>
+#include <testpp/internal/PCH/pch.hpp>
 
-#include <tester/internal/Core.hpp>
-#include <tester/internal/Renderer.hpp>
-#include <tester/internal/Runner.hpp>
-#include <tester/internal/Main.hpp>
+#include <testpp/internal/Core.hpp>
+#include <testpp/internal/Renderer.hpp>
+#include <testpp/internal/Runner.hpp>
+#include <testpp/internal/Main.hpp>
 #include <iostream>
 #include <string>
 

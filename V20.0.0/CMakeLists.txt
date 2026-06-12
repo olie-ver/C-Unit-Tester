@@ -1,5 +1,3 @@
-# Need to make a modification so that it compiles relative to this directory so __FILE__ doesn't print full path?
-
 cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -7,7 +5,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-project(tester LANGUAGES CXX)
+project(
+    testpp
+    VERSION 20.0.0
+    LANGUAGES CXX
+)
 
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 
@@ -29,7 +31,7 @@ endif()
 
 find_package(Threads REQUIRED)
 
-add_library(tester
+add_library(testpp
     src/Multithread.cpp
     src/ProcessArgs.cpp
     src/RenderConsole.cpp
@@ -40,29 +42,31 @@ add_library(tester
     src/platform/unix/isolation_unix.cpp
 )
 
-set_target_properties(tester PROPERTIES
+set_target_properties(testpp PROPERTIES
     UNITY_BUILD ON
 )
 
-target_precompile_headers(tester PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/impl_pch.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/core_pch.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/src_pch.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/tester/internal/PCH/pch.hpp"
+target_precompile_headers(testpp PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/impl_pch.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/core_pch.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/src_pch.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/testpp/internal/PCH/pch.hpp"
 )
 
-target_compile_features(tester PUBLIC cxx_std_20)
+target_compile_features(testpp PUBLIC cxx_std_20)
 
-target_include_directories(tester PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+target_include_directories(testpp
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(tester PUBLIC Threads::Threads)
+target_link_libraries(testpp PUBLIC Threads::Threads)
 
 if (MSVC)
-    target_compile_options(tester PRIVATE /W4)
+    target_compile_options(testpp PRIVATE /W4)
 else()
-    target_compile_options(tester PRIVATE
+    target_compile_options(testpp PRIVATE
         -Wall
         -Wextra
         -pedantic
@@ -70,29 +74,86 @@ else()
     )
 endif()
 
-add_executable(runTests
+add_library(testpp_main STATIC
     src/Main.cpp
-    # tests/_dataStructs.hpp
-    # tests/assert.cpp
-    # tests/bool.cpp
-    # tests/cmp.cpp
-    # tests/failingTests.cpp
-    # tests/flt.cpp
-    # tests/iterable.cpp
-    # tests/meta.cpp
-    # tests/null.cpp
-    # tests/predicate.cpp
-    # tests/set.cpp
-    # tests/short.cpp
-    # tests/string.cpp
-    # tests/throws.cpp
-    # tests/timeout.cpp
-    # tests/isolation.cpp
-    tests/sanitizer.cpp
 )
 
-target_link_libraries(runTests PRIVATE tester)
+target_link_libraries(
+    testpp_main
+    PUBLIC
+    testpp
+)
+
+add_executable(runTests
+    src/Main.cpp
+)
+
+target_link_libraries(
+    runTests
+    PRIVATE
+    testpp_main
+)
+
+target_link_libraries(runTests PRIVATE testpp)
+
+add_executable(testpp_cli
+    cli/Main.cpp
+    cli/CreateCMake.cpp
+    cli/GetInstallationFolder.cpp
+)
+
+target_compile_features(testpp_cli PRIVATE cxx_std_20)
+
+set_target_properties(testpp_cli PROPERTIES
+    OUTPUT_NAME testpp
+)
 
 enable_testing()
 
 add_test(NAME framework_tests COMMAND runTests)
+
+install(
+    TARGETS
+        testpp
+        testpp_main
+    EXPORT testppTargets
+)
+
+install(
+    DIRECTORY include/
+    DESTINATION include
+)
+
+install(
+    EXPORT testppTargets
+    FILE testppTargets.cmake
+    NAMESPACE testpp::
+    DESTINATION lib/cmake/testpp
+)
+
+install(
+    TARGETS testpp_cli
+    RUNTIME DESTINATION bin
+)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+    cmake/testppConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/testppConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/testpp
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/testppConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/testppConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/testppConfigVersion.cmake"
+    DESTINATION
+        lib/cmake/testpp
+)

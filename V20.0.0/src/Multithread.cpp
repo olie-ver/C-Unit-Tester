@@ -1,6 +1,6 @@
-#include <tester/internal/PCH/pch.hpp>
+#include <testpp/internal/PCH/pch.hpp>
 
-#include <tester/internal/Runner.hpp>
+#include <testpp/internal/Runner.hpp>
 #include <atomic>
 #include <chrono>
 #include <iostream>

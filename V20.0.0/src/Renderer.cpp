@@ -1,6 +1,6 @@
-#include <tester/internal/PCH/pch.hpp>
+#include <testpp/internal/PCH/pch.hpp>
 
-#include <tester/internal/Renderer.hpp>
+#include <testpp/internal/Renderer.hpp>
 #include <iostream>
 
 namespace internal {
