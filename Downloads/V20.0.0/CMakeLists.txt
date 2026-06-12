@@ -1,5 +1,3 @@
-# Need to make a modification so that it compiles relative to this directory so __FILE__ doesn't print full path?
-
 cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -76,20 +74,48 @@ else()
     )
 endif()
 
+add_library(testpp_main STATIC
+    src/Main.cpp
+)
+
+target_link_libraries(
+    testpp_main
+    PUBLIC
+    testpp
+)
+
 add_executable(runTests
     src/Main.cpp
-    #your tests go here
-    yourTests/example.cpp
+)
+
+target_link_libraries(
+    runTests
+    PRIVATE
+    testpp_main
 )
 
 target_link_libraries(runTests PRIVATE testpp)
+
+add_executable(testpp_cli
+    cli/Main.cpp
+    cli/CreateCMake.cpp
+    cli/GetInstallationFolder.cpp
+)
+
+target_compile_features(testpp_cli PRIVATE cxx_std_20)
+
+set_target_properties(testpp_cli PROPERTIES
+    OUTPUT_NAME testpp
+)
 
 enable_testing()
 
 add_test(NAME framework_tests COMMAND runTests)
 
 install(
-    TARGETS testpp
+    TARGETS
+        testpp
+        testpp_main
     EXPORT testppTargets
 )
 
@@ -103,6 +129,11 @@ install(
     FILE testppTargets.cmake
     NAMESPACE testpp::
     DESTINATION lib/cmake/testpp
+)
+
+install(
+    TARGETS testpp_cli
+    RUNTIME DESTINATION bin
 )
 
 include(CMakePackageConfigHelpers)

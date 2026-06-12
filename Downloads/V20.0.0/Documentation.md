@@ -6,9 +6,10 @@ You may consider this code open-source to be downloaded, modified, and released 
 
 ## Table of Contents
 1. [Adding To Your Projects](#adding-to-your-projects)
-    1. [Compiling And Linked](#compiling-and-linking)
-    2. [Include Inside Your Projects](#include-inside-your-project)
-    3. [CLI Usage](#cli-usage)
+    1. [Installation](#installation)
+    2. [Compiling And Linking](#compiling-and-linking)
+    3. [Include Inside Your Projects](#include-inside-your-project)
+    4. [CLI Usage](#cli-usage)
         1. [Verbosity](#verbosity)
         2. [Threads](#threads)
         3. [Timeout](#timeouts)
@@ -236,6 +237,31 @@ You may consider this code open-source to be downloaded, modified, and released 
 
 ## Adding To Your Projects
 
+### Installing
+If you want to use this as a standalone library, see [Compiling And Linking](#compiling-and-linking). In order to install, be inside the V20.0.0 folder and run these commands:
+```
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+sudo cmake --install build
+```
+This will install Test++ as a command line command you can use directly in the terminal. It has 3 ways to call it:
+```
+testpp
+```
+This command will run the last build made by Test++. If there is none, then it will say that there is nothing to run.
+
+```
+testpp (files)
+```
+This command will compile and run the passed in files. These files will be compiled by C++20 standards, so they must be compatible to be compiled with those standards. 
+
+```
+testpp (directories)
+```
+This command will compile and run the passed in directories. These files will be compiled by C++20 standards, so they must be compatible to be compiled with those standards. Only .cpp files will be compiled.
+
+The `testpp` command can also be passed in the same kind of flags as if it were an executable.
+
 ### Compiling And Linking
 In order to add to your projects, you need the libtester.a library file. As a static library, it will need to be linked to in the compilation phase. A minimum working directory to compile and link the library is as follows: <br> 
 Root/ <br> 
@@ -252,7 +278,7 @@ There are more ways to compile and link, and I expect the general user to have m
 Inside your project, you can include the library like so:
 <br>
 At the top of your file add:
-`#include <tester/Tests.hpp>`.
+`#include <testpp/testpp.hpp>`.
 <br>
 And now you can start testing right away.
 
@@ -628,7 +654,7 @@ In order to register a test, there are two options: `TEST(suite_name, test_name)
 
 Some usage examples below:
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 //No main() is required
 
@@ -639,7 +665,7 @@ D_TEST(name) { //Notice name has no quotes inside the macro
 ```
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 //No main() is required
 
@@ -652,7 +678,7 @@ TEST(suite_name, test_name) { //Notice neither name have quotes
 An example of an disallowed naming:
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(not_unique_name) {
     ...
@@ -667,7 +693,7 @@ D_TEST(not_unique_name) {
 In the above example, compilation will fail because the test is defined twice. One more example with TEST() to drive it home:
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(suite_name, not_unique_name) {
     ...
@@ -731,7 +757,7 @@ Boolean tests are used to check the truthiness of a value/condition.
 `ASSERT_TRUE(cond)` takes in a single parameter which is a condition that evaluates to a boolean value. It passes iff the condition evaluates to `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_true) {
     ASSERT_TRUE(true); //passes
@@ -745,7 +771,7 @@ D_TEST(assert_true) {
 `ASSERT_FALSE(cond)` takes in a single parameter which is a condition that evaluates to a boolean value. It passes iff the condition evaluates to `false` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_false) {
     ASSERT_FALSE(false); //passes
@@ -759,7 +785,7 @@ D_TEST(assert_false) {
 `EXPECT_TRUE(cond)` takes in a single parameter which is a condition that evaluates to a boolean value. It passes iff the condition evaluates to `true` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_true) {
     EXPECT_TRUE(true); //passes
@@ -773,7 +799,7 @@ D_TEST(expect_true) {
 `EXPECT_FALSE(cond)` takes in a single parameter which is a condition that evaluates to a boolean value. It passes iff the condition evaluates to `false` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_false) {
     EXPECT_FALSE(false); //passes
@@ -803,7 +829,7 @@ Comparison tests are used to compare the relation between two different values. 
 `ASSERT_EQ(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `==` operator. It passes iff `a == b` is `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_equals) {
@@ -819,7 +845,7 @@ D_TEST(assert_equals) {
 `ASSERT_NE(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `!=` operator. If the `!=` operator is not defined between the two parameters, it will fall back on using `==` for comparison. In the case that `!=` is defined on `a` and `b`, the test will pass iff `a != b` is `true` and fails otherwise. In the case that `!=` is not defined on `a` and `b`, the test will pass iff `!(a == b)` is `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_not_equals) {
@@ -835,7 +861,7 @@ D_TEST(assert_not_equals) {
 `ASSERT_LT(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `<` operator. It passes iff `a < b` is `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_less_than) {
     ASSERT_LT(-1, 5); //passes
@@ -847,7 +873,7 @@ D_TEST(assert_less_than) {
 `ASSERT_LE(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `<=` operator. It passes iff `a <= b` is `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_less_than_equals) {
     ASSERT_LE(-1, 5); //passes
@@ -860,7 +886,7 @@ D_TEST(assert_less_than_equals) {
 `ASSERT_GT(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `>` operator. It passes iff `a > b` is `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_greater_than) {
     ASSERT_GT(0x105, 5); //passes
@@ -872,7 +898,7 @@ D_TEST(assert_greater_than) {
 `ASSERT_GE(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `>=` operator. It passes iff `a >= b` is `true` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_greater_than_equals) {
     ASSERT_GE(0x105, 5); //passes
@@ -884,7 +910,7 @@ D_TEST(assert_greater_than_equals) {
 `EXPECT_EQ(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `==` operator. It passes iff `a == b` is `true` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_equals) {
@@ -900,7 +926,7 @@ D_TEST(assert_equals) {
 `EXPECT_NE(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `!=` operator. If the `!=` operator is not defined between the two parameters, it will fall back on using `==` for comparison. In the case that `!=` is defined on `a` and `b`, the test will pass iff `a != b` is `true` and fails otherwise. In the case that `!=` is not defined on `a` and `b`, the test will pass iff `!(a == b)` is `true` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_not_equals) {
@@ -916,7 +942,7 @@ D_TEST(assert_not_equals) {
 `EXPECT_LT(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `<` operator. It passes iff `a < b` is `true` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_less_than) {
     EXPECT_LT(-1, 5); //passes
@@ -927,7 +953,7 @@ D_TEST(assert_less_than) {
 ### EXPECT_LE()
 `EXPECT_LE(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `<=` operator. It passes iff `a <= b` is `true` and fails otherwise.
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_less_than_equals) {
     EXPECT_LE(-1, 5); //passes
@@ -940,7 +966,7 @@ D_TEST(assert_less_than_equals) {
 `EXPECT_GT(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `>` operator. It passes iff `a > b` is `true` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_greater_than) {
     EXPECT_GT(0x105, 5); //passes
@@ -951,7 +977,7 @@ D_TEST(assert_greater_than) {
 ### EXPECT_GE()
 `EXPECT_GE(a, b)` takes in two parameters, `a` and `b`, and compares as defined by the `<=` operator. It passes iff `a <= b` is `true` and fails otherwise.
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_greater_than_equals) {
     EXPECT_GE(0x105, 5); //passes
@@ -987,7 +1013,7 @@ In the case that `rel_tol` is not provided, this test becomes the same as [Asser
 In the case that `rel_tol` is provided, this test passes iff `|a - b| <= max(|abs_tol|, |rel_tol| * max(|a|, |b|))`. That is, the absolute difference of `a` and `b` must be smaller than the larger of the absolute value of `abs_tol` and the product of the absolute value of `rel_tol` and the larger of `|a|` and `|b|`. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_near, three_param) {
     float a = 5.0;
@@ -1013,7 +1039,7 @@ TEST(assert_near, four_param) {
 `ASSERT_ABS_NEAR(a, b, abs_tol)` takes in three arguments. `a` and `b` are two floating point values of an two floating point types. `abs_tol` defines the maximum difference `a` and `b` can be from each other. This test passes iff `|a - b| <= |abs_tol|`. That is, the absolute difference of `a` and `b` must be smaller than the absolute value of `abs_tol`. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_abs_near) {
     float a = 5.0;
@@ -1031,7 +1057,7 @@ D_TEST(assert_abs_near) {
 `ASSERT_REL_NEAR(a, b, rel_tol)` takes in three arguments. `a` and `b` are two floating point values of an two floating point types. `rel_tol` defines how relatively near `a` and `b` should be. This test passes iff `|a - b| <= |rel_tol| * max(|a|, |b|)`. That is, the absolute difference of `a` and `b` must be smaller than the product of `rel_tol` and the larger of `|a|` and `|b|`. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_rel_near) {
     float a = 5.0;
@@ -1049,7 +1075,7 @@ D_TEST(assert_rel_near) {
 `ASSERT_NAN(a)` takes in one parameter, `a`, which is a floating point value. It passes iff `a` is equivalent to `NAN` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_nan) {
     float a = 5.0;
@@ -1062,7 +1088,7 @@ D_TEST(assert_nan) {
 `ASSERT_NOT_NAN(a)` takes in one parameter, `a`, which is a floating point value. It passes iff `a` is not equivalent to `NAN` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_nan) {
     float a = 5.0;
@@ -1075,7 +1101,7 @@ D_TEST(assert_nan) {
 `ASSERT_INF(number)` takes in one parameter, a floating point value. If passes iff `number` is positive infinity or negative infinity and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_int) {
     float a = 5.0;
@@ -1096,7 +1122,7 @@ D_TEST(assert_int) {
 `ASSERT_POS_INF(number)` takes in one parameter, a floating point value. If passes iff `number` is positive infinity and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_pos_int) {
     float a = 5.0;
@@ -1117,7 +1143,7 @@ D_TEST(assert_pos_int) {
 `ASSERT_NEG_INF(number)` takes in one parameter, a floating point value. If passes iff `number` is negative infinity and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_neg_int) {
     float a = 5.0;
@@ -1142,7 +1168,7 @@ In the case that `rel_tol` is not provided, this test becomes the same as [Expec
 In the case that `rel_tol` is provided, this test passes iff `|a - b| <= max(|abs_tol|, |rel_tol| * max(|a|, |b|))`. That is, the absolute difference of `a` and `b` must be smaller than the larger of the absolute value of `abs_tol` and the product of the absolute value of `rel_tol` and the larger of `|a|` and `|b|`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_near, three_param) {
     float a = 5.0;
@@ -1168,7 +1194,7 @@ TEST(expect_near, four_param) {
 `EXPECT_ABS_NEAR(a, b, abs_tol)` takes in three arguments. `a` and `b` are two floating point values of an two floating point types. `abs_tol` defines the maximum difference `a` and `b` can be from each other. This test passes iff `|a - b| <= |abs_tol|`. That is, the absolute difference of `a` and `b` must be smaller than the absolute value of `abs_tol`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_abs_near) {
     float a = 5.0;
@@ -1186,7 +1212,7 @@ D_TEST(expect_abs_near) {
 `EXPECT_REL_NEAR(a, b, rel_tol)` takes in three arguments. `a` and `b` are two floating point values of an two floating point types. `rel_tol` defines how relatively near `a` and `b` should be. This test passes iff `|a - b| <= |rel_tol| * max(|a|, |b|)`. That is, the absolute difference of `a` and `b` must be smaller than the product of `rel_tol` and the larger of `|a|` and `|b|`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_rel_near) {
     float a = 5.0;
@@ -1204,7 +1230,7 @@ D_TEST(expect_rel_near) {
 `EXPECT_NAN(a)` takes in one parameter, `a`, which is a floating point value. It passes iff `a` is equivalent to `NAN` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_nan) {
     float a = 5.0;
@@ -1217,7 +1243,7 @@ D_TEST(expect_nan) {
 `ASSERT_NOT_NAN(a)` takes in one parameter, `a`, which is a floating point value. It passes iff `a` is not equivalent to `NAN` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_nan) {
     float a = 5.0;
@@ -1230,7 +1256,7 @@ D_TEST(expect_nan) {
 `EXPECT_INF(number)` takes in one parameter, a floating point value. If passes iff `number` is positive infinity or negative infinity and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_int) {
     float a = 5.0;
@@ -1251,7 +1277,7 @@ D_TEST(expect_int) {
 `EXPECT_POS_INF(number)` takes in one parameter, a floating point value. If passes iff `number` is positive infinity and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_pos_int) {
     float a = 5.0;
@@ -1272,7 +1298,7 @@ D_TEST(expect_pos_int) {
 `EXPECT_NEG_INF(number)` takes in one parameter, a floating point value. If passes iff `number` is negative infinity and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(expect_neg_int) {
     float a = 5.0;
@@ -1317,7 +1343,7 @@ In order to be an iterable container, the passed in container needs to satisfy t
 `EXPECT_ORDERED_EQ(first, second)` takes in two arguments: two iterable containers. The two containers do not necessarily have to be the same type. However, you are responsible for passing in the correct container types into the function. Ie, passing in unordered containers such as `unordered_map` and `unordered_set` are not guaranteed to work properly. This test passes iff every element in each container are `==` at the same index, and fails otherwise. This test will also automatically fail when given two containers with different item counts. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1353,7 +1379,7 @@ D_TEST(assert_ordered_eq) {
 `EXPECT_ORDERED_EQ(first, second)` takes in two arguments: two iterable containers. The two containers do not necessarily have to be the same type. However, you are responsible for passing in the correct container types into the function. Ie, passing in unordered containers such as `unordered_map` and `unordered_set` are not guaranteed to work properly. This test passes iff every element in each container are `==` at the same index, and fails otherwise. This test will also automatically fail when given two containers with different item counts. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1393,7 +1419,7 @@ D_TEST(assert_unordered_eq) {
 `ASSERT_ORDERED_NE(first, second)` takes in two parameters: two iterable containers that satisfy the `ranges` concept whose elements are capable of being compared by the `==` operator. It passes iff `first` and `second` have at least one element that do not pass a comparison by the `==` operator and fails otherwise. This function should only be called on containers that have some deterministic method of ordering its elements, ie, passing in `unordered` containers yields undefined behavior. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1433,7 +1459,7 @@ D_TEST(assert_ordered_ne) {
 `ASSERT_UNORDERED_NE(first, second)` takes in two parameters: two iterable containers that satisfy the `ranges` concept whose elements are capable of being compared by the `==` operator. It passes iff `first` and `second` have at least one element that do not pass a comparison by the `==` operator and fails otherwise. Unlike `ASSERT_ORDERED_NE()`, this function can be used on any kind of container, eg. the ones that don't maintain any ordering. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1473,7 +1499,7 @@ D_TEST(assert_unordered_ne) {
 `ASSERT_EMPTY(container)` takes in one parameter, a container with the `size()` method. It passes iff `container.size() == 0` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1490,7 +1516,7 @@ D_TEST(assert_empty) {
 `ASSERT_NEMPTY(container)` takes in one parameter. takes in one parameter, a container with the `size()` method. It passes iff `container.size() != 0` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1507,7 +1533,7 @@ D_TEST(assert_nempty) {
 `ASSERT_SIZE(container, size)` takes in two parameters, takes in one parameter, a container with the `size()` method and a `size_t`. It passes iff `container.size() == size` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1526,7 +1552,7 @@ D_TEST(assert_size) {
 `ASSERT_CONTAINS(container, value)` takes in two parameters, a `ranges` container and a value to search for. It passes iff `container` contains `value` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1545,7 +1571,7 @@ D_TEST(assert_contains) {
 `ASSERT_DOES_NOT_CONTAIN(container, value)` takes in two parameters, a `ranges` container and a value to search for. It passes iff `container` does not contain `value` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1564,7 +1590,7 @@ D_TEST(assert_does_not_contain) {
 `EXPECT_ORDERED_EQ(first, second)` takes in two arguments: two iterable containers. The two containers do not necessarily have to be the same type. However, you are responsible for passing in the correct container types into the function. Ie, passing in unordered containers such as `unordered_map` and `unordered_set` are not guaranteed to work properly. This test passes iff every element in each container are `==` at the same index, and fails otherwise. This test will also automatically fail when given two containers with different item counts.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1600,7 +1626,7 @@ D_TEST(expect_ordered_eq) {
 `EXPECT_UNORDERED_EQ(first, second)` takes in two arguments: two iterable containers. The two containers do not necessarily have to be the same type. This test can take in any kind of container, ordered or unordered, in fact, when this test is used on ordered containers, its behavior is the same as `EXPECT_ORDERED_EQ()`. This test passes iff both containers have the same elements (as defined by `==`) and the same count of each element, regardless of indexing, and fails otherwise. This test will also automatically fail when given two containers with different item counts.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1640,7 +1666,7 @@ D_TEST(expect_ordered_eq) {
 `EXPECT_ORDERED_NE(first, second)` takes in two parameters: two iterable containers that satisfy the `ranges` concept whose elements are capable of being compared by the `==` operator. It passes iff `first` and `second` have at least one element that do not pass a comparison by the `==` operator and fails otherwise. This function should only be called on containers that have some deterministic method of ordering its elements, ie, passing in `unordered` containers yields undefined behavior.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1680,7 +1706,7 @@ D_TEST(expect_ordered_ne) {
 `EXPECT_UNORDERED_NE(first, second)` takes in two parameters: two iterable containers that satisfy the `ranges` concept whose elements are capable of being compared by the `==` operator. It passes iff `first` and `second` have at least one element that do not pass a comparison by the `==` operator and fails otherwise. Unlike `ASSERT_ORDERED_NE()`, this function can be used on any kind of container, eg. the ones that don't maintain any ordering.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 #include <unordered_set>
@@ -1720,7 +1746,7 @@ D_TEST(expect_unordered_ne) {
 `EXPECT_EMPTY(container)` takes in one parameter, a container with the `size()` method. It passes iff `container.size() == 0` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1737,7 +1763,7 @@ D_TEST(expect_empty) {
 `EXPECT_NEMPTY(container)` takes in one parameter. takes in one parameter, a container with the `size()` method. It passes iff `container.size() != 0` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1754,7 +1780,7 @@ D_TEST(expect_nempty) {
 `EXPECT_SIZE(container, size)` takes in two parameters, takes in one parameter, a container with the `size()` method and a `size_t`. It passes iff `container.size() == size` and fails otherwise. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1773,7 +1799,7 @@ D_TEST(expect_size) {
 `EXPECT_CONTAINS(container, value)` takes in two parameters, a `ranges` container and a value to search for. It passes iff `container` contains `value` and fails otherwise. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1792,7 +1818,7 @@ D_TEST(expect_contains) {
 `EXPECT_DOES_NOT_CONTAIN(container, value)` takes in two parameters, a `ranges` container and a value to search for. It passes iff `container` does not contain `value` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <set>
 
@@ -1820,7 +1846,7 @@ There is an extra meta test `*_FAILS_WITH_MSG()`, however, since the error messa
 `ASSERT_PASSES(test)` takes in one parameter, which is a test. It passes iff the passed in test passes, and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void gonnaBreakThings() { }
 
@@ -1839,7 +1865,7 @@ D_TEST(assert_passes) {
 `EXPECT_FAILS(test)` takes in one parameter, which is a test. It passes iff the passed in test fails, and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void gonnaBreakThings() { }
 
@@ -1856,7 +1882,7 @@ D_TEST(assert_fails) {
 `EXPECT_PASSES(test)` takes in one parameter, which is a test. It passes iff the passed in test passes, and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void gonnaBreakThings() { }
 
@@ -1875,7 +1901,7 @@ D_TEST(expect_passes) {
 `EXPECT_FAILS(test)` takes in one parameter, which is a test. It passes iff the passed in test fails, and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void gonnaBreakThings() { }
 
@@ -1900,7 +1926,7 @@ Null tests are used to check if a value is equal to the `nullptr` or not. Since 
 `ASSERT_NULL(val)` takes in a single parameter `val` and asserts that it's the nullptr. This test passes iff `val == nullptr` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_null) {
     ASSERT_NULL(nullptr) //passes
@@ -1912,7 +1938,7 @@ D_TEST(assert_null) {
 `ASSERT_NOT_NULL(val)` takes in a single parameter `val` and asserts that it's not the nullptr. This test passes iff `val != nullptr` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_null) {
     ASSERT_NOT_NULL("hello") //passes
@@ -1925,7 +1951,7 @@ D_TEST(assert_null) {
 `EXPECT_NULL(val)` takes in a single parameter `val` and checks that it's the nullptr. This test passes iff `val == nullptr` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_null) {
     void* ptr = nullptr;
@@ -1939,7 +1965,7 @@ D_TEST(assert_null) {
 `EXPECT_NOT_NULL(val)` takes in a single parameter `val` and checks that it's not the nullptr. This test passes iff `val != nullptr` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_null) {
     void* ptr = nullptr;
@@ -1963,7 +1989,7 @@ Predicate tests are used to test containers and arrays to see if every element, 
 `ASSERT_ALL(container, condition)` takes in two parameters: a container and an anonymous function that returns a boolean value. The container does not have to be an `stl` container, ie. arrays are fine as well. This test passes iff every element in `container` passes the `condition` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_all) {
@@ -1979,7 +2005,7 @@ D_TEST(assert_all) {
 `ASSERT_SOME(container, condition)` takes in two parameters: a container and an anonymous function that returns a boolean value. The container does not have to be an `stl` container, ie. arrays are fine as well. This test passes iff at least one element in `container` passes the `condition` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_some) {
@@ -1997,7 +2023,7 @@ D_TEST(assert_some) {
 `ASSERT_NONE(container, condition)` takes in two parameters: a container and an anonymous function that returns a boolean value. The container does not have to be an `stl` container, ie. arrays are fine as well. This test passes iff no element in `container` passes the `condition` and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(assert_none) {
@@ -2015,7 +2041,7 @@ D_TEST(assert_none) {
 `EXPECT_ALL(container, condition)` takes in two parameters: a container and an anonymous function that returns a boolean value. The container does not have to be an `stl` container, ie. arrays are fine as well. This test passes iff every element in `container` passes the `condition` and fails otherwise. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(expect_all) {
@@ -2030,7 +2056,7 @@ D_TEST(expect_all) {
 ### EXPECT_SOME
 `EXPECT_SOME(container, condition)` takes in two parameters: a container and an anonymous function that returns a boolean value. The container does not have to be an `stl` container, ie. arrays are fine as well. This test passes iff at least one element in `container` passes the `condition` and fails otherwise.
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(expect_some) {
@@ -2048,7 +2074,7 @@ D_TEST(expect_some) {
 `EXPECT_NONE(container, condition)` takes in two parameters: a container and an anonymous function that returns a boolean value. The container does not have to be an `stl` container, ie. arrays are fine as well. This test passes iff no element in `container` passes the `condition` and fails otherwise. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 
 D_TEST(expect_none) {
@@ -2080,7 +2106,7 @@ Set tests are used on containers that satisfy the `ranges` concept. They can be 
 `ASSERT_SET_EQ(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff `first` and `second` contain the same elements, REGARDLESS of counts, and fails otherwise. Note that this indifference of counts is a big criterion that separates this test from `ASSERT_UNORDERED_EQ()`. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2104,7 +2130,7 @@ D_TEST(assert_set_eq) {
 `ASSERT_SET_NE(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff `first` and `second` has at least one differing element, REGARDLESS of counts, and fails otherwise. Note that this indifference of counts is a big criterion that separates this test from `ASSERT_UNORDERED_NE()`. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2128,7 +2154,7 @@ D_TEST(assert_set_ne) {
 `ASSERT_SUBSET(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff every element in `first` appears in `second` REGARDLESS of counts, and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2151,7 +2177,7 @@ D_TEST(assert_subset) {
 `ASSERT_SUPERSET(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff every element in `second` appears in `first` REGARDLESS of counts, and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2177,7 +2203,7 @@ D_TEST(assert_superset) {
 `ASSERT_STRICT_SUBSET(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff every element in `first` appears in `second`, and there is at least one element in `second` that does not appear in `first`, REGARDLESS of counts, and fails otherwise. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2205,7 +2231,7 @@ D_TEST(assert_strict_subset) {
 `EXPECT_SET_EQ(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff `first` and `second` contain the same elements, REGARDLESS of counts, and fails otherwise. Note that this indifference of counts is a big criterion that separates this test from `EXPECT_UNORDERED_EQ()`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2229,7 +2255,7 @@ D_TEST(expect_set_eq) {
 `EXPECT_SET_NE(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff `first` and `second` has at least one differing element, REGARDLESS of counts, and fails otherwise. Note that this indifference of counts is a big criterion that separates this test from `EXPECT_UNORDERED_NE()`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2253,7 +2279,7 @@ D_TEST(expect_set_ne) {
 `EXPECT_SUBSET(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff every element in `first` appears in `second` REGARDLESS of counts, and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2276,7 +2302,7 @@ D_TEST(expect_subset) {
 `EXPECT_SUPERSET(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff every element in `second` appears in `first` REGARDLESS of counts, and fails otherwise. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2302,7 +2328,7 @@ D_TEST(expect_superset) {
 `EXPECT_STRICT_SUBSET(first, second)` takes in two parameters, two containers that satisfy the `ranges` concept. This test passes iff every element in `first` appears in `second`, and there is at least one element in `second` that does not appear in `first`, REGARDLESS of counts, and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <vector>
 #include <unordered_set>
 
@@ -2394,7 +2420,7 @@ Strings tests are used for checking the (in)equality of strings and whether or n
 In the case where both `a` and `b` are of type `std::string`, their equality is evaluated based on the `==` operator.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(assert_str_eq, std_strings) {
@@ -2417,7 +2443,7 @@ TEST(assert_str_eq, std_strings) {
 In the case where both `a` and `b` are of type `const char*`, their equality is evaluated based on the `strcmp()` function. Passing in two null `const char*` pointers will be considered equal, and will pass.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_eq, char_ptr) {
     const char* a = "hello";
@@ -2439,7 +2465,7 @@ TEST(assert_str_eq, char_ptr) {
 In the case where both `a` and `b` are of type `char[]`, their equality is evaluated based on the contents of each `char[]`. It is not enough for the lengths of the arrays to be different to disqualify equality as one could pass in two arrays of the "same string" but one padded with extra null-terminator characters `'\0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_eq, char_arr) {
     char a[] = {'h', 'e', 'l', 'l', 'o'};
@@ -2462,7 +2488,7 @@ TEST(assert_str_eq, char_arr) {
 In the case where both `a` and `b` are of type `std::string`, their equality is evaluated based on the `!=` operator.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(assert_str_ne, std_strings) {
@@ -2485,7 +2511,7 @@ TEST(assert_str_ne, std_strings) {
 In the case where both `a` and `b` are of type `const char*`, their equality is evaluated based on the `strcmp()` function. Passing in two null `const char*` pointers will be considered equal, and will fail.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_ne, char_ptr) {
     const char* a = "hello";
@@ -2507,7 +2533,7 @@ TEST(assert_str_ne, char_ptr) {
 In the case where both `a` and `b` are of type `char[]`, their equality is evaluated based on the contents of each `char[]`. It is not enough for the lengths of the arrays to be different to disqualify inequality.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_ne, char_arr) {
     char a[] = {'h', 'e', 'l', 'l', 'o'};
@@ -2532,7 +2558,7 @@ TEST(assert_str_ne, char_arr) {
 For `std::string`, emptiness is determined by the `empty()` method.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_emt, std_string) {
     std::string a = "";
@@ -2550,7 +2576,7 @@ TEST(assert_str_emt, std_string) {
 For `const char*`, emptiness is determined by whether or not the first character is the null terminator character `'\0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_emt, char_ptr) {
     const char* a = "";
@@ -2568,7 +2594,7 @@ TEST(assert_str_emt, char_ptr) {
 For `char[]`, emptiness is determined by whether whether or not the first character in the array is the null terminator character `'0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_emt, char_arr) {
     char a[] = "";
@@ -2589,7 +2615,7 @@ TEST(assert_str_emt, char_arr) {
 For `std::string`, non-emptiness is determined by the `empty()` method.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_nemt, std_string) {
     std::string a = "";
@@ -2607,7 +2633,7 @@ TEST(assert_str_nemt, std_string) {
 For `const char*`, non-emptiness is determined by whether or not the first character is the null terminator character `'\0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_nemt, char_ptr) {
     const char* a = "";
@@ -2625,7 +2651,7 @@ TEST(expect_str_nemt, char_ptr) {
 For `char[]`, non-emptiness is determined by whether whether or not the first character in the array is the null terminator character `'0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_nemt, char_arr) {
     char a[] = "";
@@ -2646,7 +2672,7 @@ TEST(assert_str_nemt, char_arr) {
 For `std::string`, string contains is determined by the `find()` method. This test passes iff `string.find(substr)` does not return `std::string::npos` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(assert_str_contains, string) {
@@ -2663,7 +2689,7 @@ TEST(assert_str_contains, string) {
 For `const char*`, string contains first checks if either `char*` is the `nullptr`. If only one of them are, this test fails. Note that this means that passing in two `nullptr` parameters will result in a passing test case. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_contains, char_ptr) {
     const char* a = "hello";
@@ -2688,7 +2714,7 @@ TEST(assert_str_contains, char_ptr) {
 For `const char[]`, string contains first checks if the length of `string` is less than the length of `substr`. If it is, this test fails. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_contains, char_arr) {
     char a[] = "hello";
@@ -2707,7 +2733,7 @@ TEST(assert_str_contains, char_arr) {
 For `std::string`, string contains is determined by the `starts_with()` method. This test passes iff `string.starts_with(substr)` does not return `false` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(assert_str_starts_with, string) {
@@ -2724,7 +2750,7 @@ TEST(assert_str_starts_with, string) {
 For `const char*`, string contains first checks if either `char*` is the `nullptr`. If only one of them are, this test fails. Note that this means that passing in two `nullptr` parameters will result in a passing test case. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_starts_with, char_ptr) {
     const char* a = "hello";
@@ -2749,7 +2775,7 @@ TEST(assert_str_starts_with, char_ptr) {
 For `const char[]`, string contains first checks if the length of `string` is less than the length of `substr`. If it is, this test fails. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_starts_with, char_arr) {
     char a[] = "hello";
@@ -2768,7 +2794,7 @@ TEST(assert_str_starts_with, char_arr) {
 For `std::string`, string contains is determined by the `starts_with()` method. This test passes iff `string.ends_with(substr)` does not return `false` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(assert_str_ends_with, string) {
@@ -2785,7 +2811,7 @@ TEST(assert_str_ends_with, string) {
 For `const char*`, string contains first checks if either `char*` is the `nullptr`. If only one of them are, this test fails. Note that this means that passing in two `nullptr` parameters will result in a passing test case. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_ends_with, char_ptr) {
     const char* a = "hello";
@@ -2810,7 +2836,7 @@ TEST(assert_str_ends_with, char_ptr) {
 For `const char[]`, string contains first checks if the length of `string` is less than the length of `substr`. If it is, this test fails. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(assert_str_ends_with, char_arr) {
     char a[] = "hello";
@@ -2829,7 +2855,7 @@ TEST(assert_str_ends_with, char_arr) {
 In the case where both `a` and `b` are of type `std::string`, their equality is evaluated based on the `==` operator.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(expect_str_eq, std_strings) {
@@ -2852,7 +2878,7 @@ TEST(expect_str_eq, std_strings) {
 In the case where both `a` and `b` are of type `const char*`, their equality is evaluated based on the `strcmp()` function. Passing in two null `const char*` pointers will be considered equal, and will pass.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_eq, char_ptr) {
     const char* a = "hello";
@@ -2874,7 +2900,7 @@ TEST(expect_str_eq, char_ptr) {
 In the case where both `a` and `b` are of type `char[]`, their equality is evaluated based on the contents of each `char[]`. It is not enough for the lengths of the arrays to be different to disqualify equality as one could pass in two arrays of the "same string" but one padded with extra null-terminator characters `'\0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_eq, char_arr) {
     char a[] = {'h', 'e', 'l', 'l', 'o'};
@@ -2897,7 +2923,7 @@ TEST(expect_str_eq, char_arr) {
 In the case where both `a` and `b` are of type `std::string`, their equality is evaluated based on the `!=` operator.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(expect_str_ne, std_strings) {
@@ -2920,7 +2946,7 @@ TEST(expect_str_ne, std_strings) {
 In the case where both `a` and `b` are of type `const char*`, their equality is evaluated based on the `strcmp()` function. Passing in two null `const char*` pointers will be considered equal, and will fail.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_ne, char_ptr) {
     const char* a = "hello";
@@ -2942,7 +2968,7 @@ TEST(expect_str_ne, char_ptr) {
 In the case where both `a` and `b` are of type `char[]`, their equality is evaluated based on the contents of each `char[]`. It is not enough for the lengths of the arrays to be different to disqualify inequality.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_ne, char_arr) {
     char a[] = {'h', 'e', 'l', 'l', 'o'};
@@ -2965,7 +2991,7 @@ TEST(expect_str_ne, char_arr) {
 For `std::string`, emptiness is determined by the `empty()` method.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_emt, std_string) {
     std::string a = "";
@@ -2983,7 +3009,7 @@ TEST(expect_str_emt, std_string) {
 For `const char*`, emptiness is determined by whether or not the first character is the null terminator character `'\0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_emt, char_ptr) {
     const char* a = "";
@@ -3001,7 +3027,7 @@ TEST(expect_str_emt, char_ptr) {
 For `char[]`, emptiness is determined by whether whether or not the first character in the array is the null terminator character `'0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_emt, char_arr) {
     char a[] = "";
@@ -3022,7 +3048,7 @@ TEST(expect_str_emt, char_arr) {
 For `std::string`, non-emptiness is determined by the `empty()` method.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_nemt, std_string) {
     std::string a = "";
@@ -3040,7 +3066,7 @@ TEST(expect_str_nemt, std_string) {
 For `const char*`, non-emptiness is determined by whether or not the first character is the null terminator character `'\0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_nemt, char_ptr) {
     const char* a = "";
@@ -3058,7 +3084,7 @@ TEST(expect_str_nemt, char_ptr) {
 For `char[]`, non-emptiness is determined by whether whether or not the first character in the array is the null terminator character `'0'`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_nemt, char_arr) {
     char a[] = "";
@@ -3079,7 +3105,7 @@ TEST(expect_str_nemt, char_arr) {
 For `std::string`, string contains is determined by the `find()` method. This test passes iff `string.find(substr)` does not return `std::string::npos` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(expect_str_contains, string) {
@@ -3096,7 +3122,7 @@ TEST(expect_str_contains, string) {
 For `const char*`, string contains first checks if either `char*` is the `nullptr`. If only one of them are, this test fails. Note that this means that passing in two `nullptr` parameters will result in a passing test case. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_contains, char_ptr) {
     const char* a = "hello";
@@ -3121,7 +3147,7 @@ TEST(expect_str_contains, char_ptr) {
 For `const char[]`, string contains first checks if the length of `string` is less than the length of `substr`. If it is, this test fails. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_contains, char_arr) {
     char a[] = "hello";
@@ -3140,7 +3166,7 @@ TEST(expect_str_contains, char_arr) {
 For `std::string`, string contains is determined by the `starts_with()` method. This test passes iff `string.starts_with(substr)` does not return `false` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(expect_str_starts_with, string) {
@@ -3157,7 +3183,7 @@ TEST(expect_str_starts_with, string) {
 For `const char*`, string contains first checks if either `char*` is the `nullptr`. If only one of them are, this test fails. Note that this means that passing in two `nullptr` parameters will result in a passing test case. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_starts_with, char_ptr) {
     const char* a = "hello";
@@ -3182,7 +3208,7 @@ TEST(expect_str_starts_with, char_ptr) {
 For `const char[]`, string contains first checks if the length of `string` is less than the length of `substr`. If it is, this test fails. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_starts_with, char_arr) {
     char a[] = "hello";
@@ -3201,7 +3227,7 @@ TEST(expect_str_starts_with, char_arr) {
 For `std::string`, string contains is determined by the `starts_with()` method. This test passes iff `string.ends_with(substr)` does not return `false` and fails otherwise.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <string>
 
 TEST(expect_str_ends_with, string) {
@@ -3218,7 +3244,7 @@ TEST(expect_str_ends_with, string) {
 For `const char*`, string contains first checks if either `char*` is the `nullptr`. If only one of them are, this test fails. Note that this means that passing in two `nullptr` parameters will result in a passing test case. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_ends_with, char_ptr) {
     const char* a = "hello";
@@ -3243,7 +3269,7 @@ TEST(expect_str_ends_with, char_ptr) {
 For `const char[]`, string contains first checks if the length of `string` is less than the length of `substr`. If it is, this test fails. If this is not the case, both `string` and `substr` are converted to `std::string` and then tested on using the above test case. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 TEST(expect_str_ends_with, char_arr) {
     char a[] = "hello";
@@ -3269,7 +3295,7 @@ Throws tests are used to check whether or not a function throws or does not thro
 `ASSERT_THROWS(func, ex)` takes in up to two parameters: a function and optionally a type of exception that should be thrown. In the case that `ex` is not provided, it will pass iff `func` throws anything. In the case that `ex` is provided, it will pass iff `func` throws the same exception type as `ex`. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void dumbFunc() {
     throws 42;
@@ -3285,7 +3311,7 @@ TEST(assert_throws, no_exception_type) {
 ```
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void dumbFunc() {
     throw 42;
@@ -3302,7 +3328,7 @@ TEST(assert_throws, with_exception_type) {
 `ASSERT_DOES_NOT_THROW(func)` takes in one parameter, which is just a function. It passes iff `func` does not throw anything. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 D_TEST(assert_does_not_throw) {
     ASSERT_DOES_NOT_THROW([&]() { }); //passes
@@ -3314,7 +3340,7 @@ D_TEST(assert_does_not_throw) {
 `ASSERT_THROWS_MSG(func, message)` takes in two parameters: a function and a message that should be thrown. It passes iff the function throws an error and the message of the thrown error is equal to the `message` parameter. Upon failure it will terminate testing for the test suite it was called in. Since C++ allows you to throw any type, this test will pass if you throw an `std::string` that is equal to the `message` parameter. Ie, you don't need to necessarily throw an `std::exception` with a `what()` that equals `message`.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <exceptional>
 #include <string>
 
@@ -3341,7 +3367,7 @@ D_TEST(assert_throws_with_message) {
 `EXPECT_THROWS(func, ex)` takes in up to two parameters: a function and optionally a type of exception that should be thrown. In the case that `ex` is not provided, it will pass iff `func` throws anything. In the case that `ex` is provided, it will pass iff `func` throws the same exception type as `ex`. 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void dumbFunc(int a, int b) {
     throw (a + b);
@@ -3356,7 +3382,7 @@ TEST(expect_throws, no_exception_type) {
 ```
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void dumbFunc(int a, int b) {
     throw (a + b);
@@ -3372,7 +3398,7 @@ TEST(expect_throws, with_exception_type) {
 `EXPECT_DOES_NOT_THROW(func)` takes in one parameter, which is just a function. It passes iff `func` does not throw anything. Upon failure it will terminate testing for the test suite it was called in.
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 
 void dumbFunc(int a, int b) {
     throw (a + b);
@@ -3389,7 +3415,7 @@ D_TEST(expect_does_not_throw) {
 
 
 ```
-#include <tester/Tests.hpp>
+#include <testpp/testpp.hpp>
 #include <exceptional>
 #include <string>
 
