@@ -8,42 +8,82 @@
 #include "../../Helpers.hpp"
 #include "../isolation_types.hpp"
 
+#ifdef _WIN32
+    #include "../../Runner.hpp"
+#endif
+
 namespace internal {
     namespace impl_iso {
         template<typename Func> 
         inline Core::ExecutionResult stdoutContains(Func&& func) {
-            Core::ExecutionResult result = isolateRun(func);
-            return result;
+            #ifdef _WIN32
+                size_t id = internal::Runner::registerDeathTest(func);
+                Core::ExecutionResult result = isolateRun(id);
+                return result;
+            #else
+                Core::ExecutionResult result = isolateRun(func);
+                return result;
+            #endif
         }
 
         template<typename Func> 
         inline Core::ExecutionResult stderrContains(Func&& func) {
-            Core::ExecutionResult result = isolateRun(func);
-            return result;
+            #ifdef _WIN32
+                size_t id = internal::Runner::registerDeathTest(func);
+                Core::ExecutionResult result = isolateRun(id);
+                return result;
+            #else
+                Core::ExecutionResult result = isolateRun(func);
+                return result;
+            #endif
         }
 
         template<typename Func> 
         inline Core::ExecutionResult noStdout(Func&& func) {
-            Core::ExecutionResult result = isolateRun(func);
-            return result;
+            #ifdef _WIN32
+                size_t id = internal::Runner::registerDeathTest(func);
+                Core::ExecutionResult result = isolateRun(id);
+                return result;
+            #else
+                Core::ExecutionResult result = isolateRun(func);
+                return result;
+            #endif
         }
 
         template<typename Func> 
         inline Core::ExecutionResult noStderr(Func&& func) {
-            Core::ExecutionResult result = isolateRun(func);
-            return result;
+            #ifdef _WIN32
+                size_t id = internal::Runner::registerDeathTest(func);
+                Core::ExecutionResult result = isolateRun(id);
+                return result;
+            #else
+                Core::ExecutionResult result = isolateRun(func);
+                return result;
+            #endif
         }
 
         template<typename Func> 
         inline Core::ExecutionResult stdoutMatches(Func&& func) {
-            Core::ExecutionResult result = isolateRun(func);
-            return result;
+            #ifdef _WIN32
+                size_t id = internal::Runner::registerDeathTest(func);
+                Core::ExecutionResult result = isolateRun(id);
+                return result;
+            #else
+                Core::ExecutionResult result = isolateRun(func);
+                return result;
+            #endif
         }
 
         template<typename Func> 
         inline Core::ExecutionResult stderrMatches(Func&& func) {
-            Core::ExecutionResult result = isolateRun(func);
-            return result;
+            #ifdef _WIN32
+                size_t id = internal::Runner::registerDeathTest(func);
+                Core::ExecutionResult result = isolateRun(id);
+                return result;
+            #else
+                Core::ExecutionResult result = isolateRun(func);
+                return result;
+            #endif
         }
     }
 }

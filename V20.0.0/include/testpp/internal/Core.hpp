@@ -182,6 +182,15 @@ namespace internal {
             Milliseconds
         };
 
+        #ifdef _WIN32
+        /// @brief A DeathTest struct only for Windows usage
+        struct DeathTest
+        {
+            std::size_t id;
+            std::function<void()> func;
+        };
+        #endif
+
         /// @brief A Test struct that contains information about a test
         struct Test {
             std::string suite_name;

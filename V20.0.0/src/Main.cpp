@@ -8,6 +8,17 @@
 #include <string>
 
 int main(int argc, char** argv) {
+#ifdef _WIN32
+    if (argc >= 3 && std::string(argv[1]) == "--death")
+    {
+        const std::size_t id = std::stoull(argv[2]);
+
+        internal::Runner::runDeathTest(id);
+
+        return EXIT_SUCCESS;
+    }
+#endif
+
     int num_threads = 1;
     int timeout = 0;
 

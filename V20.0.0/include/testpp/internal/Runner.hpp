@@ -45,6 +45,19 @@ namespace internal {
         /// @brief A set ensuring no duplicate tests are registered
         std::unordered_set<Core::Test, Core::TestHash>& getAllTests();
 
+        #ifdef _WIN32
+        /// @brief A vector of DeathTests (only for Windows usage)
+        std::vector<Core::DeathTest>& getDeathTests();
+
+        /// @brief Registers a death test
+        /// @return the death test's index (which is its id) in the vector
+        size_t registerDeathTest(std::function<void()> func);
+
+        /// @brief Runs the death test with the associated id
+        /// @param id the death test's id
+        void runDeathTest(size_t id);
+        #endif
+
         /// @brief A set containing suites that should not be tested
         std::unordered_set<std::string>& getSkipSuites();
 

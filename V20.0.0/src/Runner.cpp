@@ -26,6 +26,35 @@ namespace internal {
             return instance;
         }
 
+        #ifdef _WIN32
+        std::vector<Core::DeathTest>& getDeathTests() {
+            static std::vector<Core::DeathTest> instance;
+            return instance;
+        }
+
+        std::size_t Runner::registerDeathTest(std::function<void()> func)
+        {
+            auto& tests = getDeathTests();
+
+            const std::size_t id = tests.size();
+
+            tests.push_back({id, std::move(func)});
+
+            return id;
+        }
+
+        void Runner::runDeathTest(std::size_t id)
+        {
+            auto& tests = getDeathTests();
+
+            if (id >= tests.size()) {
+                std::abort();
+            }
+            
+            tests[id].func();
+        }
+        #endif
+
         std::unordered_set<std::string>& getSkipSuites() {
             static std::unordered_set<std::string> instance;
             return instance;
@@ -43,7 +72,7 @@ namespace internal {
             return skip.contains(suite_name) || (specific.size() != 0 && !specific.contains(suite_name));
         }
 
-        bool registerTest(const Core::Test &test)
+        bool registerTest(const Core::Test& test)
         {
             auto& ALL_TESTS = getAllTests();
 
@@ -60,7 +89,8 @@ namespace internal {
             return true;
         }
 
-        void runAllRegisteredTests(Core::TestRun& run, const int num_threads, const int timeout, Core::TimeUnit unit)
+        void runAllRegisteredTests(Core::TestRun& run, const int num_threads, 
+            const int timeout, Core::TimeUnit unit)
         {   
             using clock = std::chrono::steady_clock;
             using ms = std::chrono::milliseconds;
