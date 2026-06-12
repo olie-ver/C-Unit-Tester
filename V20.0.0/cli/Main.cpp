@@ -2,10 +2,27 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <sstream>
 
 int main(int argc, char** argv)
 {
-    std::filesystem::create_directories(".testpp");
+    std::filesystem::path installRoot = tppCLI::GetTestPPDirectory();
+    std::filesystem::create_directories(installRoot);
+
+    std::filesystem::path executable = installRoot / "build/bin/testpp_generated";
+
+    if (argc == 1)
+    {
+        if (!std::filesystem::exists(executable))
+        {
+            std::cout << "No tests to run\n";
+            return EXIT_SUCCESS;
+        }
+
+        return std::system(executable.c_str());
+    }
+
+    std::vector<std::string> args{" "};
 
     std::vector<std::filesystem::path> files;
 
@@ -27,19 +44,24 @@ int main(int argc, char** argv)
                 }
             }
         } else {
-            std::cerr << "error: " << p << " does not exist\n";
-            return EXIT_FAILURE;
+            args.push_back(p);
         }
     }
 
     if (!files.empty()) {
-        bool success = GenerateProject(files);
+        bool success = tppCLI::GenerateProject(files);
 
         if (!success) {
             return EXIT_FAILURE;
         }
 
-        int configureResult = std::system("cmake -S .testpp -B .testpp/build");
+        std::string configureCommand = std::string("cmake -S \"") 
+                                        + installRoot.string() 
+                                        + std::string("\" -B \"") 
+                                        + installRoot.string()  
+                                        + std::string("/build\"");
+
+        int configureResult = std::system(configureCommand.c_str());
 
         if (configureResult != 0)
         {
@@ -47,7 +69,13 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
 
-        int buildResult = std::system("cmake --build .testpp/build --parallel");
+        std::filesystem::path buildDir = installRoot / "build";
+
+        std::string buildCommand = std::string("cmake --build \"") 
+                                    + buildDir.string()
+                                    + std::string("\" --parallel"); 
+
+        int buildResult = std::system(buildCommand.c_str());
 
         if (buildResult != 0)
         {
@@ -56,7 +84,18 @@ int main(int argc, char** argv)
         }
     }
 
-    int runResult = std::system(".testpp/build/bin/testpp_generated");
+    // Source - https://stackoverflow.com/a/5689061
+    // Posted by sehe, modified by community. See post 'Timeline' for change history
+    // Retrieved 2026-06-11, License - CC BY-SA 3.0
 
-    return EXIT_SUCCESS;
+    const char* const delim = " ";
+
+    std::ostringstream imploded;
+    std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(imploded, delim));
+    
+    std::string runCommand = executable.string() + imploded.str();
+
+    std::cout << runCommand << "\n";
+
+    return std::system(runCommand.c_str());
 }

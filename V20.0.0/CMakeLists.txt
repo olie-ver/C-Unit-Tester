@@ -99,6 +99,7 @@ target_link_libraries(runTests PRIVATE testpp)
 add_executable(testpp_cli
     cli/Main.cpp
     cli/CreateCMake.cpp
+    cli/GetInstallationFolder.cpp
 )
 
 target_compile_features(testpp_cli PRIVATE cxx_std_20)

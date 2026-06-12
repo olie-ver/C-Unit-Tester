@@ -6,7 +6,9 @@
 #include <filesystem>
 #include <vector>
 
-bool GenerateProject(std::vector<std::filesystem::path> files);
-std::filesystem::path GetExecutablePath();
+namespace tppCLI {
+    bool GenerateProject(std::vector<std::filesystem::path> files);
+    std::filesystem::path GetTestPPDirectory();
+}
 
 #endif
