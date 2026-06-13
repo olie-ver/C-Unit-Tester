@@ -45,7 +45,7 @@ namespace internal {
         /// @brief A set ensuring no duplicate tests are registered
         std::unordered_set<Core::Test, Core::TestHash>& getAllTests();
 
-        #ifdef _WIN32 || defined(_WIN64)
+        #ifdef _WIN32
 
         struct DeathContext
         {
