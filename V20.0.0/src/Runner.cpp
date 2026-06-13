@@ -34,7 +34,7 @@ namespace internal {
             return ctx;
         }
 
-        void Runner::runSingleTest(size_t testIndex)
+        void runSingleTest(size_t testIndex)
         {
             auto& registry = getRegistry();
 
