@@ -7,10 +7,15 @@
 
 int main(int argc, char** argv)
 {
-    std::filesystem::path installRoot = tppCLI::GetTestPPDirectory();
-    std::filesystem::create_directories(installRoot);
 
-    std::filesystem::path executable = installRoot / "build/bin/testpp_generated";
+    std::filesystem::path installRoot = tppCLI::GetInstallPrefix();
+
+    std::filesystem::path workDir = tppCLI::GetWorkingDirectory();
+
+    std::filesystem::create_directories(workDir);
+    std::filesystem::remove_all(workDir / "build");
+
+    std::filesystem::path executable = workDir / "build/bin/testpp_generated";
 
     if (argc == 1)
     {
@@ -57,11 +62,11 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
 
-        std::string configureCommand = std::string("cmake -S \"") 
-                                        + installRoot.string() 
-                                        + std::string("\" -B \"") 
-                                        + installRoot.string()  
-                                        + std::string("/build\"");
+        std::string configureCommand = std::string("cmake -S \"")
+                                        + workDir.string()
+                                        + "\" -B \""
+                                        + (workDir / "build").string()
+                                        + "\"";
 
         int configureResult = std::system(configureCommand.c_str());
 
@@ -71,7 +76,7 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
 
-        std::filesystem::path buildDir = installRoot / "build";
+        std::filesystem::path buildDir = workDir / "build";
 
         std::string buildCommand = std::string("cmake --build \"") 
                                     + buildDir.string()
