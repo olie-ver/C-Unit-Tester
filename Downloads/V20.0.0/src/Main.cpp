@@ -7,7 +7,25 @@
 #include <iostream>
 #include <string>
 
+#ifdef _WIN32
+    #include <cstring>
+#endif
+
 int main(int argc, char** argv) {
+#ifdef _WIN32
+    if (argc == 4 && !strcmp("--isolation", argv[1])) {
+        auto& ctx = internal::Runner::getDeathContext();
+
+        ctx.childMode = true;
+        ctx.targetTest = std::stoull(argv[2]);
+        ctx.targetDeath = std::stoull(argv[3]);
+
+        internal::Runner::runSingleTest(ctx.targetTest);
+
+        return EXIT_SUCCESS;
+    }
+#endif
+
     int num_threads = 1;
     int timeout = 0;
 

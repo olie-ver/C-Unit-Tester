@@ -8,6 +8,12 @@
 #include <map>
 #include <vector>
 
+#include <cstdint>
+
+#if defined(_WIN32)
+    #include <sys/types.h> 
+#endif
+
 /// @brief An internal namespace. Using anything from within is not advised
 namespace internal {
     /// @brief A core namespace containing the core data structures used by the rest of the internal namespace
@@ -165,6 +171,10 @@ namespace internal {
         /// @brief The final struct for a test's execution results
         struct TestResult
         {
+            #ifdef _WIN32
+            size_t index;
+            #endif
+
             std::string suiteName;
             std::string testName;
 
@@ -182,11 +192,24 @@ namespace internal {
             Milliseconds
         };
 
+        #ifdef _WIN32
+        /// @brief A DeathTest struct only for Windows usage
+        struct DeathTest
+        {
+            std::size_t id;
+            std::function<void()> func;
+        };
+        #endif
+
         /// @brief A Test struct that contains information about a test
         struct Test {
             std::string suite_name;
             std::string test_name;
             std::function<void()> test;
+
+            #ifdef _WIN32
+            size_t index;
+            #endif
 
             bool operator==(const Test& other) const {
                 return suite_name == other.suite_name

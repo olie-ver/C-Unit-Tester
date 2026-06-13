@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
+#include <iterator>
 
 int main(int argc, char** argv)
 {
@@ -19,7 +20,8 @@ int main(int argc, char** argv)
             return EXIT_SUCCESS;
         }
 
-        return std::system(executable.c_str());
+        std::string cmd = executable.string();
+        return std::system(cmd.c_str());
     }
 
     std::vector<std::string> args{" "};
@@ -44,7 +46,7 @@ int main(int argc, char** argv)
                 }
             }
         } else {
-            args.push_back(p);
+            args.push_back(p.string());
         }
     }
 
