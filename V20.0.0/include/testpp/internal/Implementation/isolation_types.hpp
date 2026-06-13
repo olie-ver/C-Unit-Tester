@@ -29,7 +29,7 @@ namespace internal {
 
                 if (ctx.childMode)
                 {
-                    if (TEST_STACK.back().index == ctx.targetTest && deathIndex == ctx.targetDeath)
+                    if (Runner::TEST_STACK.back().index == ctx.targetTest && deathIndex == ctx.targetDeath)
                     {
                         func();
                     }
@@ -38,7 +38,7 @@ namespace internal {
                 }
 
                 return isolateRun(
-                    TEST_STACK.back().index,
+                    Runner::TEST_STACK.back().index,
                     deathIndex,
                     timeLimit
                 );
