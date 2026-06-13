@@ -69,7 +69,7 @@ namespace internal {
             return skip.contains(suite_name) || (specific.size() != 0 && !specific.contains(suite_name));
         }
 
-        bool registerTest(Core::Test& test)
+        bool registerTest(Core::Test test)
         {
             auto& ALL_TESTS = getAllTests();
 
