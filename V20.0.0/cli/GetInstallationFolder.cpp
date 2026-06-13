@@ -7,7 +7,7 @@ namespace tppCLI {
             return std::filesystem::path(std::getenv("HOME")) / ".testpp";
         #elif defined(__linux__)
             return std::filesystem::path(std::getenv("HOME")) / ".testpp";
-        #elif defined(_WIN32)
+        #elif defined(_WIN32) || defined(_WIN64)
             return std::filesystem::path(std::getenv("USERPROFILE")) / ".testpp";
         #endif
     }
