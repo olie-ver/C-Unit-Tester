@@ -10,7 +10,7 @@
 
 #include <cstdint>
 
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32)
     #include <sys/types.h> 
 #endif
 
@@ -171,7 +171,7 @@ namespace internal {
         /// @brief The final struct for a test's execution results
         struct TestResult
         {
-            #ifdef _WIN32 || defined(_WIN64)
+            #ifdef _WIN32
             size_t index;
             #endif
 
@@ -192,7 +192,7 @@ namespace internal {
             Milliseconds
         };
 
-        #ifdef _WIN32 || defined(_WIN64)
+        #ifdef _WIN32
         /// @brief A DeathTest struct only for Windows usage
         struct DeathTest
         {
@@ -207,7 +207,7 @@ namespace internal {
             std::string test_name;
             std::function<void()> test;
 
-            #ifdef _WIN32 || defined(_WIN64)
+            #ifdef _WIN32
             size_t index;
             #endif
 
