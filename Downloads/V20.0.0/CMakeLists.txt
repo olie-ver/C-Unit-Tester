@@ -13,7 +13,7 @@ project(
 
 option(ENABLE_SANITIZERS "Enable sanitizers" OFF)
 
-if(ENABLE_SANITIZERS)
+if(ENABLE_SANITIZERS AND NOT MSVC)
     message(STATUS "Sanitizers enabled")
 
     add_compile_options(
@@ -31,7 +31,7 @@ endif()
 
 find_package(Threads REQUIRED)
 
-add_library(testpp
+set(TESTPP_SOURCES
     src/Multithread.cpp
     src/ProcessArgs.cpp
     src/RenderConsole.cpp
@@ -39,8 +39,19 @@ add_library(testpp
     src/RenderJson.cpp
     src/RenderXml.cpp
     src/Runner.cpp
-    src/platform/unix/isolation_unix.cpp
 )
+
+if(WIN32)
+    list(APPEND TESTPP_SOURCES
+        src/platform/windows/isolation_windows.cpp
+    )
+else()
+    list(APPEND TESTPP_SOURCES
+        src/platform/unix/isolation_unix.cpp
+    )
+endif()
+
+add_library(testpp ${TESTPP_SOURCES})
 
 set_target_properties(testpp PROPERTIES
     UNITY_BUILD ON

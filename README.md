@@ -1,8 +1,34 @@
-# C++ Unit Tester
+# Test++
 A C++ Unit Testing library I'm building to be used in my other projects
 because even though I know how to use someone else's library, I don't want to include
 every file in every project. I know I could probably just compile someone else's 
 into a static library and call it a day, but I want the learning experience as well. 
+
+6/12/26
+This is now installable on Mac, Linux, and Windows either via the command line or Homebrew.
+Mac/Linux (CLI)
+Download the Downloads/V20.0.0 folder
+cd into it
+Run these commands:
+rm -rf build
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+sudo cmake --install build
+
+With that, you can now use the testpp command in your terminal. 
+Read the documentation for further details.
+
+Mac/Linux (Homebrew)
+Run these commands:
+brew tap olie-ver/testpp
+brew install testpp
+
+With that, you can now use the testpp command in your terminal. 
+Read the documentation for further details.
+(I recommend this way so you can also uninstall easier)
+
+Windows (CLI)
+I have no clue. I don't have a Windows computer, and using a Windows VM is absolute torture
 
 5/19/26
 TODO:

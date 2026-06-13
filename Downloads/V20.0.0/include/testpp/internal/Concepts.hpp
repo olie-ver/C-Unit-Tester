@@ -62,9 +62,9 @@ namespace internal {
         template <typename A, typename B>
         concept IterableAndComparable = requires()
         {
-            std::ranges::range<A>;
-            std::ranges::range<B>;
-            HasEQ<std::ranges::range_value_t<A>, std::ranges::range_value_t<B>>;
+            requires std::ranges::range<A>;
+            requires std::ranges::range<B>;
+            requires HasEQ<std::ranges::range_value_t<A>, std::ranges::range_value_t<B>>;
         };
 
         //A concept for types that are hashable

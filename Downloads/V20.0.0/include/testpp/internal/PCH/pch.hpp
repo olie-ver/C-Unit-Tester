@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PCH
-#define PCH
+#ifndef PCH_H
+#define PCH_H
 
 #include "core_pch.hpp"
 #include "impl_pch.hpp"
