@@ -26,7 +26,7 @@ namespace internal {
             return instance;
         }
 
-        #ifdef _WIN32
+        #ifdef _WIN32 || defined(_WIN64)
 
         DeathContext& getDeathContext()
         {
@@ -82,7 +82,7 @@ namespace internal {
 
             std::vector<Core::Test>& REGISTRY = getRegistry();
 
-            #ifdef _WIN32
+            #ifdef _WIN32 || defined(_WIN64)
             test.index = REGISTRY.size();
             #endif
 
@@ -166,7 +166,7 @@ namespace internal {
             CURRENT_TEST.testName = test.test_name;
             CURRENT_TEST.test_status = Core::TestStatus::Passed;
 
-            #ifdef _WIN32
+            #ifdef _WIN32 || defined(_WIN64)
                 getDeathContext().currentDeath = 0;
                 CURRENT_TEST.index = test.index;
             #endif

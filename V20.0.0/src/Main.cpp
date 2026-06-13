@@ -7,12 +7,12 @@
 #include <iostream>
 #include <string>
 
-#ifdef _WIN32
+#ifdef _WIN32 || defined(_WIN64)
     #include <cstring>
 #endif
 
 int main(int argc, char** argv) {
-#ifdef _WIN32
+#ifdef _WIN32 || defined(_WIN64)
     if (argc == 4 && !strcmp("--isolation", argv[1])) {
         auto& ctx = internal::Runner::getDeathContext();
 
