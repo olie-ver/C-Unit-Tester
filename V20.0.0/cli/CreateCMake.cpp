@@ -21,6 +21,8 @@ namespace tppCLI {
 
         cmake << "set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)\n\n";
 
+        cmake << "list(PREPEND CMAKE_PREFIX_PATH \"" << installRoot.string() << "\")\n";
+
         cmake << "find_package(testpp REQUIRED)\n\n";
 
         //debug
