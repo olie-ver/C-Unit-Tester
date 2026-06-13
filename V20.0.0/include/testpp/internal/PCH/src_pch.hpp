@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef SRC_PCH
-#define SRC_PCH
+#ifndef SRC_PCH_H
+#define SRC_PCH_H
 
 #include <algorithm>
 #include <atomic>
