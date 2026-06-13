@@ -45,6 +45,23 @@ namespace internal {
         /// @brief A set ensuring no duplicate tests are registered
         std::unordered_set<Core::Test, Core::TestHash>& getAllTests();
 
+        #ifdef _WIN32 || defined(_WIN64)
+
+        struct DeathContext
+        {
+            bool childMode = false;
+
+            std::size_t targetTest = std::numeric_limits<std::size_t>::max();
+            std::size_t targetDeath = std::numeric_limits<std::size_t>::max();
+            std::size_t currentDeath = 0;
+        };
+
+        DeathContext& getDeathContext();
+
+        void runSingleTest(size_t testIndex);
+
+        #endif
+
         /// @brief A set containing suites that should not be tested
         std::unordered_set<std::string>& getSkipSuites();
 
@@ -59,7 +76,7 @@ namespace internal {
         /// @brief Adds a test to the registry under a test suite
         /// @param suite_name The name of the test suite the test is a part of 
         /// @param test The test
-        bool registerTest(const Core::Test& test);
+        bool registerTest(Core::Test& test);
 
         /// @brief Runs all tests added to REGISTRY
         /// @param run The TestRun to put the results in

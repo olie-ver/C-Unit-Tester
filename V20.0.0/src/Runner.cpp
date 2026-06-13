@@ -26,6 +26,32 @@ namespace internal {
             return instance;
         }
 
+        #ifdef _WIN32 || defined(_WIN64)
+
+        DeathContext& getDeathContext()
+        {
+            static DeathContext ctx;
+            return ctx;
+        }
+
+        void Runner::runSingleTest(size_t testIndex)
+        {
+            auto& registry = getRegistry();
+
+            for (auto& test : registry)
+            {
+                if (test.index == testIndex)
+                {
+                    runTest(test);
+                    return;
+                }
+            }
+
+            std::abort();
+        }
+
+        #endif
+
         std::unordered_set<std::string>& getSkipSuites() {
             static std::unordered_set<std::string> instance;
             return instance;
@@ -43,7 +69,7 @@ namespace internal {
             return skip.contains(suite_name) || (specific.size() != 0 && !specific.contains(suite_name));
         }
 
-        bool registerTest(const Core::Test &test)
+        bool registerTest(Core::Test& test)
         {
             auto& ALL_TESTS = getAllTests();
 
@@ -56,11 +82,16 @@ namespace internal {
 
             std::vector<Core::Test>& REGISTRY = getRegistry();
 
+            #ifdef _WIN32 || defined(_WIN64)
+            test.index = REGISTRY.size();
+            #endif
+
             REGISTRY.push_back(test);
             return true;
         }
 
-        void runAllRegisteredTests(Core::TestRun& run, const int num_threads, const int timeout, Core::TimeUnit unit)
+        void runAllRegisteredTests(Core::TestRun& run, const int num_threads, 
+            const int timeout, Core::TimeUnit unit)
         {   
             using clock = std::chrono::steady_clock;
             using ms = std::chrono::milliseconds;
@@ -134,6 +165,11 @@ namespace internal {
             CURRENT_TEST.suiteName = test.suite_name;
             CURRENT_TEST.testName = test.test_name;
             CURRENT_TEST.test_status = Core::TestStatus::Passed;
+
+            #ifdef _WIN32 || defined(_WIN64)
+                getDeathContext().currentDeath = 0;
+                CURRENT_TEST.index = test.index;
+            #endif
 
             using clock = std::chrono::steady_clock;
             using ms = std::chrono::milliseconds;

@@ -10,6 +10,10 @@
 
 #include <algorithm>
 
+#ifdef _WIN32
+
+#endif
+
 //Fatal tests
 #define EXPECT_DEATH(func) internal::Expects::expectDeath((func), #func, __FILE__, __LINE__)
 #define EXPECT_SEGFAULT(func) internal::Expects::expectSegFault((func), #func, __FILE__, __LINE__)
@@ -65,7 +69,6 @@ namespace internal {
 
         template<typename Func>
         inline void expectDeath(Func&& func, const char* funcName, const char* file, const uint32_t line) {
-            //need to store execution result
             Core::ExecutionResult execRes = impl_iso::death(func);
             if (execRes.execution_status != Core::ExecutionStatus::Completed) {
                 Core::FailureInfo fail({

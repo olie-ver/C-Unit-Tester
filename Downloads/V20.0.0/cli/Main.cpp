@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
-#include <iterator>
 
 int main(int argc, char** argv)
 {
