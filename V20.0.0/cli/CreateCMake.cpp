@@ -7,8 +7,6 @@ namespace tppCLI {
         auto installRoot = GetTestPPDirectory();
 
         std::filesystem::path cmakePath = installRoot / "CMakeLists.txt";
-
-        std::filesystem::path cmakePath = installRoot / "CMakeLists.txt";
         std::string cmakePathStr = cmakePath.string(); 
 
         std::ofstream cmake(cmakePath);
