@@ -7,6 +7,7 @@
 #include <atomic>
 #include <chrono>
 #include <concepts>
+#include <cstring>
 #include <deque>
 #include <functional>
 #include <iostream>
