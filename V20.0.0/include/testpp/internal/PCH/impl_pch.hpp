@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef IMPL_PCH
-#define IMPL_PCH
+#ifndef IMPL_PCH_H
+#define IMPL_PCH_H
 
 #include "src_pch.hpp"
 
