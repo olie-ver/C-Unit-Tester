@@ -7,6 +7,7 @@
 #include "../../Helpers.hpp"
 #include <optional>
 #include <string>
+#include <cstring>
 
 namespace internal {
     namespace impl_str {
