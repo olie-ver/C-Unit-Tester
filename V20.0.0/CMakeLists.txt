@@ -85,13 +85,6 @@ else()
     )
 endif()
 
-if(WIN32)
-    target_compile_definitions(testpp PRIVATE
-        NOMINMAX
-        WIN32_LEAN_AND_MEAN
-    )
-endif()
-
 add_library(testpp_main STATIC
     src/Main.cpp
 )
