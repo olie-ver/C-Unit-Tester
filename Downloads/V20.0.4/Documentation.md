@@ -1,5 +1,5 @@
-# C++ Unit Tester V20.0.0 (Beta)
-A C++ Unit Tester for C++20 written by Oliver Lie. As a beta build/release, I make no guarantees that future versions will work the same, and implementations could change until the first working release.
+# C++ Unit Tester V20.0.4
+A C++ Unit Tester for C++20 written by Oliver Lie. Even as a more or less stable release, I still make no guarantees that future versions will work the same, and implementations could change.
 
 ### License/Conditions of Usage
 You may consider this code open-source to be downloaded, modified, and released for others under the condition that any other subsidiary code will keep these same conditions. This includes keeping the software free of charge. I also make no guarantees about correctness and the amount of bugs in this software. Don't sue me if it doesn't work :3
