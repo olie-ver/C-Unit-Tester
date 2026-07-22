@@ -76,7 +76,7 @@ namespace internal {
         /// @brief Adds a test to the registry under a test suite
         /// @param suite_name The name of the test suite the test is a part of 
         /// @param test The test
-        bool registerTest(Core::Test& test);
+        bool registerTest(Core::Test test);
 
         /// @brief Runs all tests added to REGISTRY
         /// @param run The TestRun to put the results in

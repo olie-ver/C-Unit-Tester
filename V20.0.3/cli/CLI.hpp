@@ -8,7 +8,8 @@
 
 namespace tppCLI {
     bool GenerateProject(std::vector<std::filesystem::path> files);
-    std::filesystem::path GetTestPPDirectory();
+    std::filesystem::path GetInstallPrefix();
+    std::filesystem::path GetWorkingDirectory();
 }
 
 #endif

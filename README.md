@@ -6,6 +6,7 @@ into a static library and call it a day, but I want the learning experience as w
 
 6/12/26
 This is now installable on Mac, Linux, and Windows either via the command line or Homebrew.
+
 Mac/Linux (CLI)
 Download the Downloads/V20.0.0 folder
 cd into it
@@ -26,6 +27,11 @@ brew install testpp
 With that, you can now use the testpp command in your terminal. 
 Read the documentation for further details.
 (I recommend this way so you can also uninstall easier)
+
+To add to your includes (So VSCode can find it):
+"includePath": [
+    "/opt/homebrew/opt/testpp/include"
+],
 
 Windows (CLI)
 I have no clue. I don't have a Windows computer, and using a Windows VM is absolute torture
