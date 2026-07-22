@@ -15,9 +15,10 @@ You may consider this code open-source to be downloaded, modified, and released 
         3. [Timeout](#timeouts)
         3. [Skipping Tests](#skipping-tests)
         4. [Specifying Tests](#test-specific)
-        5. [JSON Output](#json-output)
-        6. [XML Output](#xml-output)
-        7. [stdout/stderr Output](#stdoutstderr-output)
+        5. [Streaming Output](#streaming-output)
+        6. [JSON Output](#json-output)
+        7. [XML Output](#xml-output)
+        8. [stdout/stderr Output](#stdoutstderr-output)
 2. [Testing](#testing)
     1. [Registering Tests](#registering-tests)
     2. [Different Types Of Tests](#different-types-of-tests)
@@ -307,6 +308,40 @@ In order to specify which test suites are to be tested, you need to type in the 
 By default, excluding this flag will make every test be run unless the [skip](#skipping-tests) flag is included (with suites attached).
 
 Notice how skipping tests and specifying tests to be run are basically identical behavior. They are for your own convenience. If you specify a test suite to be skipped and to be tested: `--skip=Suite --test_only=Suite`, then the suite will still be skipped. 
+
+#### Streaming Output
+If you are running lots of tests that will take some (noticeable) time to complete, it can be helpful to stream a status report
+instead of waiting for the run summary to print out at the end. For this purpose, you can use the following flag:
+`--stream`.
+
+This flag when used will print out a status report of each test including their number, start/end/skip status, their suite name, and their test name. Some sample output when using this below:
+
+```
+[3/145][STARTED]: boolean_torture -> literal_true_passes
+[4/145][STARTED]: boolean_torture -> literal_false_fails
+[3/145][ENDED]: boolean_torture -> literal_true_passes
+[5/145][STARTED]: boolean_torture -> false_passes_expect_false
+[1/145][STARTED]: timeout -> fail
+...
+[141/145][ENDED]: String -> Equality
+[138/145][STARTED]: null -> Torture_Optional_Basic
+[138/145][ENDED]: null -> Torture_Optional_Basic
+[1/145][ENDED]: timeout -> fail
+...
+--------------------------------------------------
+Ran 145 tests...
+
+[PASS] FloatBasic -> AbsoluteEquality (0 ms)
+[PASS] FloatBasic -> RelativeEquality (0 ms)
+...
+[PASS] null -> Torture_WeirdCases (0 ms)
+[PASS] timeout -> fail (10005 ms)
+--------------------------------------------------
+Total: 145 | Passed: 145 | Failed: 0 | Skipped: 0
+Time: 10006 ms
+```
+
+Streaming only streams console output, and therefore is completely compatible with outputting JSON or XML (it has no impact on the resulting JSON or XML output).
 
 #### JSON Output
 In order to have JSON output of a test run, type in the following flag:

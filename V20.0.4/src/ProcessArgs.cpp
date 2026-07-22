@@ -69,6 +69,7 @@ void renderUsage(char* bad_flag) {
     std::cerr << "\t stdout output length: --truncatestdout= or truncstdout" << std::endl;
     std::cerr << "\t stderr output length: --truncatestderr= or truncstderr" << std::endl;
     std::cerr << "\t stdout and stderr output length (1024 chars): --truncate" << std::endl;
+    std::cerr << "Stream Progres:: --stream" << std::endl;
     std::cerr << "Supported verbosity flags: ";
     std::cerr << "default, minimum, passonly, failonly, failonlymin" << std::endl;
     std::cerr << "Suites being skipped must be separated by ',' with NO space in between" << std::endl;

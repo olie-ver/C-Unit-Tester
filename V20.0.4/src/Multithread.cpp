@@ -1,6 +1,7 @@
 #include <testpp/internal/PCH/pch.hpp>
 
 #include <testpp/internal/Runner.hpp>
+#include <testpp/internal/Renderer.hpp>
 #include <atomic>
 #include <chrono>
 #include <iostream>
@@ -11,6 +12,7 @@ namespace internal {
 
         void threadWorker(std::vector<Core::TestResult>& results, Core::Test& running) {
             std::vector<Core::Test>& REGISTRY = getRegistry();
+            size_t size = REGISTRY.size();
     
             while (true) {
                 size_t index = next_index.fetch_add(1);
@@ -31,11 +33,41 @@ namespace internal {
                     skip.execution_ms = 0.0;
 
                     results[index] = skip;
+
+                    if (Renderer::shouldStream) {
+                        Renderer::stream(
+                            '[' + std::to_string(index + 1) + '/' +
+                            std::to_string(size) +
+                            "][SKIPPED]: " +
+                            test.suite_name + " -> " +
+                            test.test_name + '\n'
+                        );
+                    }
                 } else {
                     running = test;
 
+                    if (Renderer::shouldStream) {
+                        Renderer::stream(
+                            '[' + std::to_string(index + 1) + '/' +
+                            std::to_string(size) +
+                            "][STARTED]: " +
+                            test.suite_name + " -> " +
+                            test.test_name + '\n'
+                        );
+                    }
+
                     //only allow non-skipped tests to be run
                     results[index] = runTest(test);
+
+                    if (Renderer::shouldStream) {
+                        Renderer::stream(
+                            '[' + std::to_string(index + 1) + '/' +
+                            std::to_string(size) +
+                            "][ENDED]: " +
+                            test.suite_name + " -> " +
+                            test.test_name + '\n'
+                        );
+                    }
                 }
             }
         }

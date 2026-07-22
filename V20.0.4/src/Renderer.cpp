@@ -2,29 +2,29 @@
 
 #include <testpp/internal/Renderer.hpp>
 #include <iostream>
+#include <mutex>
 
 namespace internal {
     namespace Renderer {
         void ConsoleRenderer::render(Core::TestRun& testRun) 
         {
-
             if (jsonFile != "") {
                 switch (verb) {
                     case Verbosity::Default:
                         renderDefaultJson(testRun);
-                        break;
+                        return;
                     case Verbosity::Minimum:
                         renderMinimumJson(testRun);
-                        break;
+                        return;
                     case Verbosity::PassOnly:
                         renderPassOnlyJson(testRun);
-                        break;
+                        return;
                     case Verbosity::FailOnlyMin:
                         renderFailMinJson(testRun);
-                        break;
+                        return;
                     case Verbosity::FailOnlyAll:
                         renderFailAllJson(testRun);
-                        break;
+                        return;
                 }
             }
 
@@ -32,25 +32,23 @@ namespace internal {
                 switch (verb) {
                     case Verbosity::Default:
                         renderDefaultXml(testRun);
-                        break;
+                        return;
                     case Verbosity::Minimum:
                         renderMinimumXml(testRun);
-                        break;
+                        return;
                     case Verbosity::PassOnly:
                         renderPassOnlyXml(testRun);
-                        break;
+                        return;
                     case Verbosity::FailOnlyMin:
                         renderFailMinXml(testRun);
-                        break;
+                        return;
                     case Verbosity::FailOnlyAll:
                         renderFailAllXml(testRun);
-                        break;
+                        return;
                 }
             }
 
-            if (jsonFile != "" || junitFile != "") {
-                return;
-            }
+            std::cout << std::string(50, '-') << '\n' << std::endl;
 
             std::cout << "Ran " << testRun.total << " tests..." << std::endl;
  
@@ -80,6 +78,13 @@ namespace internal {
             std::cout << " | Failed: " << failed;
             std::cout << " | Skipped: " << skipped << std::endl;
             std::cout << "Time: " << testRun.totalMs << " ms" << std::endl;
+        }
+
+        void stream(const std::string_view& msg) {
+            static std::mutex m;
+
+            std::lock_guard lock(m);
+            std::cout << msg;
         }
     }
 }

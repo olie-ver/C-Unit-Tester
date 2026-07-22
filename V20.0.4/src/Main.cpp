@@ -176,6 +176,8 @@ int main(int argc, char** argv) {
                 std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                 return EXIT_FAILURE;
             }
+        } else if (flag == "--stream") {
+            internal::Renderer::shouldStream = true;
         } else {
             renderUsage(argv[i]);
             return EXIT_FAILURE;
@@ -186,7 +188,7 @@ int main(int argc, char** argv) {
 
     internal::Runner::runAllRegisteredTests(testRun, num_threads, timeout, unit);
 
-    internal::Renderer::ConsoleRenderer renderer(jsonFile, jUnitFile, verbFlag, stdoutSize, stderrSize);
+    internal::Renderer::ConsoleRenderer renderer(verbFlag, jsonFile, jUnitFile, stdoutSize, stderrSize);
 
     renderer.render(testRun);
     return EXIT_SUCCESS;

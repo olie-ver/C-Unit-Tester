@@ -4,6 +4,7 @@
 #define RENDERER_H
 
 #include "Core.hpp"
+#include <string_view>
 
 /// @brief An internal namespace. Using anything from within is not advised
 namespace internal {
@@ -18,6 +19,10 @@ namespace internal {
             FailOnlyMin
         };
 
+        inline bool shouldStream = false;
+
+        void stream(const std::string_view& msg);
+
         class ITestRenderer {
             public:
                 virtual ~ITestRenderer() = default;
@@ -26,8 +31,8 @@ namespace internal {
 
         class ConsoleRenderer : public ITestRenderer {
             public:
-                ConsoleRenderer(const std::string jsonFile = "", const std::string junitFile = "", 
-                    Verbosity verbosity = Verbosity::Default, const int stdoutSize = 0, const int stderrSize = 0) 
+                ConsoleRenderer(Verbosity verbosity = Verbosity::Default, const std::string jsonFile = "", 
+                    const std::string junitFile = "", const int stdoutSize = 0, const int stderrSize = 0) 
                     : verb(verbosity), jsonFile(jsonFile), junitFile(junitFile), stdoutSize(stdoutSize),
                         stderrSize(stderrSize) {};
 
@@ -37,6 +42,9 @@ namespace internal {
                 Verbosity verb;
                 const std::string jsonFile;
                 const std::string junitFile;
+
+                bool stream = false;
+
                 int passed = 0;
                 int failed = 0;
                 int skipped = 0;
