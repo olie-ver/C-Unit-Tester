@@ -7,7 +7,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 project(
     testpp
-    VERSION 20.0.4
+    VERSION 20.0.6
     LANGUAGES CXX
 )
 
@@ -103,13 +103,11 @@ target_link_libraries(
     runTests
     PRIVATE
     testpp_main
+    testpp
 )
 
-target_link_libraries(runTests PRIVATE testpp)
-
-
 add_executable(cliTest
-    src/Main.cpp
+    # src/Main.cpp
     tests/string.cpp
     tests/flt.cpp
 )
