@@ -5,12 +5,6 @@
 #include <sstream>
 
 namespace tppCLI {
-    void CreateConfig(std::filesystem::path path) {
-        std::ofstream config(path, std::ios::out | std::ios::trunc);
-
-        config << "--num_threads=1 --timeout=0 --verbosity=default --truncatestdout=0 --truncatestderr=0";
-    }
-
     void CreateConfig(std::filesystem::path path, int argc, char** argv) {
         //read in the current config settings
         Config config = GetConfig(path);
@@ -113,8 +107,8 @@ namespace tppCLI {
                     std::cerr << "Missing .xml file path after --junit/--xml flag" << std::endl;
                     std::abort();
                 }
-            } else if (flag.find("--truncatestdout=") != std::string::npos 
-                || flag.find("--truncstdout=") != std::string::npos)
+            } else if (flag.find("--stdoutSize=") != std::string::npos 
+                || flag.find("--stdout=") != std::string::npos)
             {
                 std::string arg = flag.substr(flag.find('=') + 1);
 
@@ -131,8 +125,8 @@ namespace tppCLI {
                     std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                     std::abort();
                 }
-            } else if (flag.find("--truncatestderr=") != std::string::npos 
-                || flag.find("--truncstderr=") != std::string::npos)
+            } else if (flag.find("--stderrSize=") != std::string::npos 
+                || flag.find("--stderr=") != std::string::npos)
             {  std::string arg = flag.substr(flag.find('=') + 1);
 
                 try {

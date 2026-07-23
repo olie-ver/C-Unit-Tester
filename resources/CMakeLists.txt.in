@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(testpp_generated)
+
+find_package(testpp REQUIRED)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+    ${CMAKE_BINARY_DIR}/bin
+)
+
+add_executable(testpp_generated
+    @USER_SOURCES@
+)
+
+target_link_libraries(
+    testpp_generated
+    PRIVATE
+        testpp::testpp_main
+)
