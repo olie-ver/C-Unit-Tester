@@ -7,7 +7,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 project(
     testpp
-    VERSION 20.0.0
+    VERSION 20.0.4
     LANGUAGES CXX
 )
 
@@ -107,10 +107,25 @@ target_link_libraries(
 
 target_link_libraries(runTests PRIVATE testpp)
 
+
+add_executable(cliTest
+    src/Main.cpp
+    tests/string.cpp
+    tests/flt.cpp
+)
+
+target_link_libraries(
+    cliTest
+    PRIVATE
+    testpp_main
+    testpp
+)
+
 add_executable(testpp_cli
     cli/Main.cpp
     cli/CreateCMake.cpp
     cli/GetInstallationFolder.cpp
+    cli/CreateConfig.cpp
 )
 
 target_compile_features(testpp_cli PRIVATE cxx_std_20)

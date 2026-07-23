@@ -47,23 +47,23 @@ namespace tppCLI {
         // cmake << ")\n";
 
         //debug
-        cmake << "message(STATUS \"testpp_DIR = ${testpp_DIR}\")\n";
+        // cmake << "message(STATUS \"testpp_DIR = ${testpp_DIR}\")\n";
 
-        cmake << "get_target_property(\n";
-        cmake << "    TESTPP_INCLUDES\n";
-        cmake << "    testpp::testpp\n";
-        cmake << "    INTERFACE_INCLUDE_DIRECTORIES\n";
-        cmake << ")\n";
+        // cmake << "get_target_property(\n";
+        // cmake << "    TESTPP_INCLUDES\n";
+        // cmake << "    testpp::testpp\n";
+        // cmake << "    INTERFACE_INCLUDE_DIRECTORIES\n";
+        // cmake << ")\n";
 
-        cmake << "message(STATUS \"testpp includes = ${TESTPP_INCLUDES}\")\n";
+        // cmake << "message(STATUS \"testpp includes = ${TESTPP_INCLUDES}\")\n";
 
-        cmake << "get_target_property(\n";
-        cmake << "    TESTPP_MAIN_LINKS\n";
-        cmake << "    testpp::testpp_main\n";
-        cmake << "    INTERFACE_LINK_LIBRARIES\n";
-        cmake << ")\n";
+        // cmake << "get_target_property(\n";
+        // cmake << "    TESTPP_MAIN_LINKS\n";
+        // cmake << "    testpp::testpp_main\n";
+        // cmake << "    INTERFACE_LINK_LIBRARIES\n";
+        // cmake << ")\n";
 
-        cmake << "message (STATUS \"testpp_main includes = ${TESTPP_MAIN_LINKS}\")\n";
+        // cmake << "message (STATUS \"testpp_main includes = ${TESTPP_MAIN_LINKS}\")\n";
         //end of debug
 
         cmake << "add_executable(testpp_generated\n";

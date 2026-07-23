@@ -2,20 +2,28 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
+#include <fstream>
 #include <sstream>
 #include <iterator>
 
 int main(int argc, char** argv)
 {
-
     std::filesystem::path installRoot = tppCLI::GetInstallPrefix();
 
     std::filesystem::path workDir = tppCLI::GetWorkingDirectory();
 
     std::filesystem::create_directories(workDir);
-    std::filesystem::remove_all(workDir / "build");
+    std::filesystem::remove_all(workDir / "build/CMakeCache.txt");
+
+    std::filesystem::path configPath = workDir / "config.txt";
+
+    if (!std::filesystem::exists(configPath)) {
+        tppCLI::CreateConfig(configPath);
+    }
 
     std::filesystem::path executable = workDir / "build/bin/testpp_generated";
+    // std::filesystem::path executable = "build/bin/cliTest";
 
     if (argc == 1)
     {
@@ -25,9 +33,36 @@ int main(int argc, char** argv)
             return EXIT_SUCCESS;
         }
 
-        std::string cmd = executable.string();
+        std::ifstream readConfig(configPath);
+        std::stringstream configSettings;
+        configSettings << readConfig.rdbuf();
+
+        std::string cmd = executable.string() + " " + configSettings.str();
+
+        // std::cout << "Isolated runCommand: " << cmd << std::endl;
+
         return std::system(cmd.c_str());
     }
+
+    if (argc >= 2) {
+        std::string flag(argv[1]);
+        std::transform(flag.begin(), flag.end(), flag.begin(), [](unsigned char c) { return std::tolower(c); });
+
+        if (flag.find("--version") != std::string::npos) {
+            std::cout << "Test++ 20.0.4" << std::endl;
+            return EXIT_SUCCESS;
+        }
+
+        if (flag == "--reset") {
+            tppCLI::CreateConfig(configPath);
+            return EXIT_SUCCESS;
+        }
+
+        if (flag == "config") {
+            tppCLI::CreateConfig(configPath, argc, argv);
+            return EXIT_SUCCESS;
+        }
+    }    
 
     std::vector<std::string> args{" "};
 
@@ -38,6 +73,7 @@ int main(int argc, char** argv)
 
         if (std::filesystem::is_regular_file(p))
         {
+            // std::cout << "FILE: " << p << std::endl;
             files.push_back(std::filesystem::absolute(p));
         } 
         else if (std::filesystem::is_directory(p))
@@ -47,10 +83,12 @@ int main(int argc, char** argv)
             {
                 if (entry.path().extension() == ".cpp")
                 {
+                    // std::cout << "FILE: " << entry.path() << std::endl;
                     files.push_back(std::filesystem::absolute(entry.path()));
                 }
             }
         } else {
+            // std::cout << "ARG: " << p.string() << std::endl;
             args.push_back(p.string());
         }
     }
@@ -98,11 +136,18 @@ int main(int argc, char** argv)
     const char* const delim = " ";
 
     std::ostringstream imploded;
+    //copy the args over
     std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(imploded, delim));
-    
-    std::string runCommand = executable.string() + imploded.str();
 
-    std::cout << runCommand << "\n";
+    //read the config settings
+    std::ifstream readConfig(configPath);
+    std::stringstream configSettings;
+    configSettings << readConfig.rdbuf();
+    
+    //runCommand is path => configSettings => explicit settings (the explicit settings override any configSettings)
+    std::string runCommand = executable.string() + " " + configSettings.str() + " " + imploded.str();
+
+    // std::cout << "runCommand: " << runCommand << "\n";
 
     return std::system(runCommand.c_str());
 }

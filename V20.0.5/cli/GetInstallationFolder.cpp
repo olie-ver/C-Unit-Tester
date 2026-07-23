@@ -25,7 +25,7 @@ namespace tppCLI {
         #endif
     }
 
-    std::filesystem::path tppCLI::GetWorkingDirectory() {
+    std::filesystem::path GetWorkingDirectory() {
         #ifdef _WIN32
             const char* home = std::getenv("USERPROFILE");
         #else

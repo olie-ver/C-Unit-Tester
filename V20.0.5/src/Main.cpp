@@ -43,6 +43,11 @@ int main(int argc, char** argv) {
     // process the arguments
     for (int i = 1; i < argc; i++) {
         std::string flag(argv[i]);
+        
+
+        std::cout << "FLAG: " << flag << std::endl;
+
+
         std::transform(flag.begin(), flag.end(), flag.begin(), 
             [](unsigned char c) { return std::tolower(c); });
 
@@ -119,11 +124,15 @@ int main(int argc, char** argv) {
                 jUnitFile = argv[++i];
                 if (!jUnitFile.ends_with(".xml")) {
                     std::cerr << "Invalid .xml path: " << jUnitFile << std::endl;
+                    return EXIT_FAILURE;
                 }
             } else {
                 std::cerr << "Missing .xml file path after --junit/--xml flag" << std::endl;
+                return EXIT_FAILURE;
             }
-        } else if (flag == "--truncatestdout=" || flag == "--truncstdout=") {
+        } else if (flag.find("--truncatestdout=") != std::string::npos 
+            || flag.find("--truncstdout=") != std::string::npos)
+        {
             std::string arg = flag.substr(flag.find('=') + 1);
 
             try {
@@ -140,7 +149,9 @@ int main(int argc, char** argv) {
                 std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                 return EXIT_FAILURE;
             }
-        } else if (flag == "--truncatestderr=" || flag == "--truncstderr=") {
+        } else if (flag.find("--truncatestderr=") != std::string::npos 
+            || flag.find("--truncstderr=") != std::string::npos)
+        {
             std::string arg = flag.substr(flag.find('=') + 1);
 
             try {
@@ -157,25 +168,9 @@ int main(int argc, char** argv) {
                 std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                 return EXIT_FAILURE;
             }
-        } else if (flag == "--truncate=") {
-            std::string arg = flag.substr(flag.find('=') + 1);
-
-            try {
-                size_t pos{};
-                int size = std::stoi(arg, &pos);
-                if (size < 0) {
-                    std::cerr << "stdout and stderr output length must be nonnegative" << std::endl;
-                    return EXIT_FAILURE;
-                }
-                stdoutSize = size;
-                stderrSize = size;
-            } catch (std::invalid_argument const& ex) {
-                std::cerr << "std::invalid_argument::what(): " << ex.what() << '\n';
-                return EXIT_FAILURE;
-            } catch (std::out_of_range const& ex) {
-                std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
-                return EXIT_FAILURE;
-            }
+        } else if (flag == "--truncate") {
+            stdoutSize = 1024;
+            stderrSize = 1024;
         } else if (flag == "--stream") {
             internal::Renderer::shouldStream = true;
         } else {

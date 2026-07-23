@@ -66,11 +66,11 @@ namespace internal {
 
         /// @brief A simple mapping from CrashType => string representation
         static std::string CrashStrings[] = 
-            {
-                "None", "Seg Fault", "Access Violation", "Abort", "Divide By Zero",
-                "Illegal Instruction", "Bus Error", "Floating Point Exception",
-                "Trap", "Killed", "Unknown"
-            };
+        {
+            "None", "Seg Fault", "Access Violation", "Abort", "Divide By Zero",
+            "Illegal Instruction", "Bus Error", "Floating Point Exception",
+            "Trap", "Killed", "Unknown"
+        };
 
         /// @brief A ProcessInfo struct
         /// Contains: process id, the native exit code, the native signal, if the core was dumped
