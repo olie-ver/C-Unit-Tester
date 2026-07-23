@@ -13,8 +13,8 @@ namespace tppHelpers {
     );
 
     void getFilesAndArgs(int argc, char** argv,
-        const std::vector<std::string>& args, 
-        const std::vector<std::filesystem::path>& files
+        std::vector<std::string>& args, 
+        std::vector<std::filesystem::path>& files
     );
 
     void generateCMake(
