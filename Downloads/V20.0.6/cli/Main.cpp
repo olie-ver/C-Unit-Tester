@@ -7,8 +7,16 @@
 #include <sstream>
 #include <iterator>
 
+#define VERSION "Test++ V20.0.6"
+
 int main(int argc, char** argv)
 {
+    // std::cout << "from CLI:" << std::endl;
+    // for (int i = 0; i < argc; i++) {
+    //     std::cout << argv[i] << " ";
+    // }
+    // std::cout << std::endl;
+
     std::filesystem::path installRoot = tppCLI::GetInstallPrefix();
 
     std::filesystem::path workDir = tppCLI::GetWorkingDirectory();
@@ -49,7 +57,7 @@ int main(int argc, char** argv)
         std::transform(flag.begin(), flag.end(), flag.begin(), [](unsigned char c) { return std::tolower(c); });
 
         if (flag.find("--version") != std::string::npos) {
-            std::cout << "Test++ 20.0.4" << std::endl;
+            std::cout << VERSION << std::endl;
             return EXIT_SUCCESS;
         }
 

@@ -26,6 +26,12 @@ int main(int argc, char** argv) {
     }
 #endif
 
+    // std::cout << "from framework:" << std::endl;
+    // for (int i = 0; i < argc; i++) {
+    //     std::cout << argv[i] << " ";
+    // }
+    // std::cout << std::endl;
+
     int num_threads = 1;
     int timeout = 0;
 
@@ -43,11 +49,6 @@ int main(int argc, char** argv) {
     // process the arguments
     for (int i = 1; i < argc; i++) {
         std::string flag(argv[i]);
-        
-
-        std::cout << "FLAG: " << flag << std::endl;
-
-
         std::transform(flag.begin(), flag.end(), flag.begin(), 
             [](unsigned char c) { return std::tolower(c); });
 
