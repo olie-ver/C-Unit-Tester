@@ -131,8 +131,8 @@ int main(int argc, char** argv) {
                 std::cerr << "Missing .xml file path after --junit/--xml flag" << std::endl;
                 return EXIT_FAILURE;
             }
-        } else if (flag.find("--truncatestdout=") != std::string::npos 
-            || flag.find("--truncstdout=") != std::string::npos)
+        } else if (flag.find("--stdoutSize=") != std::string::npos 
+            || flag.find("--stdout=") != std::string::npos)
         {
             std::string arg = flag.substr(flag.find('=') + 1);
 
@@ -150,8 +150,8 @@ int main(int argc, char** argv) {
                 std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                 return EXIT_FAILURE;
             }
-        } else if (flag.find("--truncatestderr=") != std::string::npos 
-            || flag.find("--truncstderr=") != std::string::npos)
+        } else if (flag.find("--stderrSize=") != std::string::npos 
+            || flag.find("--stderr=") != std::string::npos)
         {
             std::string arg = flag.substr(flag.find('=') + 1);
 

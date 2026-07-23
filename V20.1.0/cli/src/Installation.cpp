@@ -24,18 +24,4 @@ namespace tppCLI {
             return std::filesystem::path(std::getenv("USERPROFILE")) / ".testpp";
         #endif
     }
-
-    std::filesystem::path GetWorkingDirectory() {
-        #ifdef _WIN32
-            const char* home = std::getenv("USERPROFILE");
-        #else
-            const char* home = std::getenv("HOME");
-        #endif
-
-        if (!home) {
-            throw std::runtime_error("Unable to determine home directory");
-        }
-
-        return std::filesystem::path(home) / ".testpp";
-    }
 }
