@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iterator>
 
-#define VERSION "Test++ V20.0.7"
+#define VERSION "Test++ V20.0.8"
 
 int main(int argc, char** argv)
 {
