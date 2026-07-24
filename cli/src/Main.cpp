@@ -8,7 +8,7 @@
 #include <sstream>
 #include <iterator>
 
-#define VERSION "Test++ V20.1.0"
+#define VERSION "Test++ V20.1.1"
 
 int main(int argc, char** argv) {
     std::filesystem::path installRoot = tppCLI::GetInstallPrefix();
