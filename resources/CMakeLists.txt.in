@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(testpp_generated)
 
+list(PREPEND CMAKE_PREFIX_PATH "@INSTALL_PREFIX@")
 find_package(testpp REQUIRED)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY

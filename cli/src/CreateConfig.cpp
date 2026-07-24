@@ -32,7 +32,7 @@ namespace tppCLI {
                                  ",\n and default";
                     std::abort();  
                 }
-            } else if (flag.find("--num_threads=") != std::string::npos
+            } else if (flag.find("--numthreads=") != std::string::npos
                 || flag.find("--threads=") != std::string::npos
                 || flag.find("--t=") != std::string::npos)
             {
@@ -107,7 +107,7 @@ namespace tppCLI {
                     std::cerr << "Missing .xml file path after --junit/--xml flag" << std::endl;
                     std::abort();
                 }
-            } else if (flag.find("--stdoutSize=") != std::string::npos 
+            } else if (flag.find("--stdoutsize=") != std::string::npos 
                 || flag.find("--stdout=") != std::string::npos)
             {
                 std::string arg = flag.substr(flag.find('=') + 1);
@@ -125,7 +125,7 @@ namespace tppCLI {
                     std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                     std::abort();
                 }
-            } else if (flag.find("--stderrSize=") != std::string::npos 
+            } else if (flag.find("--stderrsize=") != std::string::npos 
                 || flag.find("--stderr=") != std::string::npos)
             {  std::string arg = flag.substr(flag.find('=') + 1);
 
@@ -155,7 +155,7 @@ namespace tppCLI {
 
         std::ofstream configFile(path, std::ios::out | std::ios::trunc);
 
-        configFile << "--num_threads=" << config.num_threads;
+        configFile << "--numthreads=" << config.num_threads;
         configFile << " --timeout";
         if (config.time_unit == "ms") {
             configFile << "_ms";
@@ -182,8 +182,8 @@ namespace tppCLI {
             configFile << " --testonly=" << config.testOnlySuites;
         }
 
-        configFile << " --stdoutSize=" << config.stdoutSize;
-        configFile << " --stderrSize=" << config.stderrSize;
+        configFile << " --stdoutsize=" << config.stdoutSize;
+        configFile << " --stderrsize=" << config.stderrSize;
 
         if (config.stream) {
             configFile << " --stream";
@@ -205,7 +205,7 @@ namespace tppCLI {
             {
                 config.verbosity = flag.substr(flag.find('=') + 1);
             }
-            else if (flag.find("--num_threads=") != std::string::npos)
+            else if (flag.find("--numthreads=") != std::string::npos)
             {
                 config.num_threads = std::stoi(flag.substr(flag.find('=') + 1), &pos);
             }
@@ -237,11 +237,11 @@ namespace tppCLI {
             {
                 file >> config.jUnitFile;
             }
-            else if (flag.find("--stdoutSize=") != std::string::npos)
+            else if (flag.find("--stdoutsize=") != std::string::npos)
             {
                 config.stdoutSize = std::stoi(flag.substr(flag.find('=') + 1), &pos);
             }
-            else if (flag.find("--stderrSize=") != std::string::npos)
+            else if (flag.find("--stderrsize=") != std::string::npos)
             {
                 config.stderrSize = std::stoi(flag.substr(flag.find('=') + 1), &pos);
             }

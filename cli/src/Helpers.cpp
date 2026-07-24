@@ -82,7 +82,6 @@ namespace tppHelpers {
 
             if (std::filesystem::is_regular_file(p))
             {
-                // std::cout << "FILE: " << p << std::endl;
                 files.push_back(std::filesystem::absolute(p));
             } 
             else if (std::filesystem::is_directory(p))
@@ -92,23 +91,23 @@ namespace tppHelpers {
                 {
                     if (entry.path().extension() == ".cpp")
                     {
-                        // std::cout << "FILE: " << entry.path() << std::endl;
                         files.push_back(std::filesystem::absolute(entry.path()));
                     }
                 }
             } else {
-                // std::cout << "ARG: " << p.string() << std::endl;
                 args.push_back(p.string());
             }
         }
     }
 
     void generateCMake(
+        const std::filesystem::path& install_prefix,
         const std::filesystem::path& write_loc,
         const std::filesystem::path& cmake_template, 
         const std::vector<std::filesystem::path>& files
     ) 
     {
+        const std::string installReplace = "@INSTALL_PREFIX@";
         const std::string replace = "@USER_SOURCES@";
 
         std::ifstream readCmakeTemplate(cmake_template);
@@ -121,12 +120,18 @@ namespace tppHelpers {
             imploded << files[i] << "\n\t";
         }
 
-        size_t replace_start = generate_executable.find(replace);
+        generate_executable.replace(
+            generate_executable.find(installReplace),
+            installReplace.size(),
+            install_prefix.string());
 
-        std::string generate_command = generate_executable.replace(replace_start, replace.size(), imploded.str());
+        generate_executable.replace(
+            generate_executable.find(replace),
+            replace.size(),
+            imploded.str());
 
-        std::ofstream out(write_loc, std::ios::out | std::ios::trunc);
-        out << generate_command;
+        std::ofstream out(write_loc);
+        out << generate_executable;
         out.close();
     }
 
