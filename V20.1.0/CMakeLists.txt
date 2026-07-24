@@ -58,8 +58,6 @@ install(
 
 #Create and install empty directories for runtime
 install(DIRECTORY DESTINATION run)
-install(DIRECTORY build DESTINATION run)
-install(DIRECTORY bin DESTINATION run/build)
 
 #install Test++ as a package
 install(
