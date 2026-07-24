@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project (
     testpp
-    VERSION 20.1.1
+    VERSION 20.1.2
     LANGUAGES CXX
 )
 
@@ -58,6 +58,7 @@ install(
 
 #Create and install empty directories for runtime
 install(DIRECTORY DESTINATION run)
+install(DIRECTORY DESTINATION run/build)
 
 #install Test++ as a package
 install(

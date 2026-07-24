@@ -8,7 +8,7 @@
 #include <sstream>
 #include <iterator>
 
-#define VERSION "Test++ V20.1.1"
+#define VERSION "Test++ V20.1.2"
 
 int main(int argc, char** argv) {
     std::filesystem::path installRoot = tppCLI::GetInstallPrefix();
@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
     std::filesystem::path user_conf = run / "config.conf";
     std::filesystem::path cmake_template = var / "CMakeLists.txt.in";
 
+    std::filesystem::create_directory(run / "build");
     std::filesystem::remove(run / "build" / "CMakeCache.txt");
 
     if (!std::filesystem::exists(user_conf)) {
