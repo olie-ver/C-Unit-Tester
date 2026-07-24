@@ -8,7 +8,7 @@
 #include <sstream>
 #include <iterator>
 
-#define VERSION "Test++ V20.1.0"
+#define VERSION "Test++ V20.1.2"
 
 int main(int argc, char** argv) {
     std::filesystem::path installRoot = tppCLI::GetInstallPrefix();
@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
     std::filesystem::path user_conf = run / "config.conf";
     std::filesystem::path cmake_template = var / "CMakeLists.txt.in";
 
+    std::filesystem::create_directory(run / "build");
     std::filesystem::remove(run / "build" / "CMakeCache.txt");
 
     if (!std::filesystem::exists(user_conf)) {
@@ -80,7 +81,7 @@ int main(int argc, char** argv) {
 
     tppHelpers::getFilesAndArgs(argc, argv, args, files);
 
-    tppHelpers::generateCMake(run / "build" / "CMakeLists.txt", cmake_template, files);
+    tppHelpers::generateCMake(installRoot, run / "build" / "CMakeLists.txt", cmake_template, files);
 
     if (!tppHelpers::configureAndBuild(run)) {
         return EXIT_FAILURE;
@@ -95,6 +96,8 @@ int main(int argc, char** argv) {
     //Run command is "user_exec" configSettings arguments
     // arguments override any configSettings so it's all good to just add them in front
     std::string run_command = '\"' + user_exec.string() + '\"' + " " + configSettings.str() + argStream.str();
+
+    std::cout << "RUNCOMMAND: " << run_command << std::endl;
 
     return std::system(run_command.c_str());
 }

@@ -32,7 +32,7 @@ namespace tppCLI {
                                  ",\n and default";
                     std::abort();  
                 }
-            } else if (flag.find("--num_threads=") != std::string::npos
+            } else if (flag.find("--numthreads=") != std::string::npos
                 || flag.find("--threads=") != std::string::npos
                 || flag.find("--t=") != std::string::npos)
             {
@@ -107,7 +107,7 @@ namespace tppCLI {
                     std::cerr << "Missing .xml file path after --junit/--xml flag" << std::endl;
                     std::abort();
                 }
-            } else if (flag.find("--stdoutSize=") != std::string::npos 
+            } else if (flag.find("--stdoutsize=") != std::string::npos 
                 || flag.find("--stdout=") != std::string::npos)
             {
                 std::string arg = flag.substr(flag.find('=') + 1);
@@ -125,7 +125,7 @@ namespace tppCLI {
                     std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                     std::abort();
                 }
-            } else if (flag.find("--stderrSize=") != std::string::npos 
+            } else if (flag.find("--stderrsize=") != std::string::npos 
                 || flag.find("--stderr=") != std::string::npos)
             {  std::string arg = flag.substr(flag.find('=') + 1);
 
@@ -155,7 +155,7 @@ namespace tppCLI {
 
         std::ofstream configFile(path, std::ios::out | std::ios::trunc);
 
-        configFile << "--num_threads=" << config.num_threads;
+        configFile << "--numthreads=" << config.num_threads;
         configFile << " --timeout";
         if (config.time_unit == "ms") {
             configFile << "_ms";
@@ -182,84 +182,13 @@ namespace tppCLI {
             configFile << " --testonly=" << config.testOnlySuites;
         }
 
-        configFile << " --truncatestdout=" << config.stdoutSize;
-        configFile << " --truncatestderr=" << config.stderrSize;
+        configFile << " --stdoutsize=" << config.stdoutSize;
+        configFile << " --stderrsize=" << config.stderrSize;
 
         if (config.stream) {
             configFile << " --stream";
         }
     }
-
-    // const Config GetConfig(std::filesystem::path path) {
-    //     Config config;
-
-    //     std::ifstream file(path);
-    //     std::string flag; 
-    //     size_t pos{};
-    //     while (std::getline(file, flag))
-    //     {
-    //         if (flag.find("--v=") != std::string::npos 
-    //             || flag.find("--verbosity=") != std::string::npos)
-    //         {
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.verbosity = arg;
-    //         } 
-    //         else if (flag.find("--num_threads=") != std::string::npos)
-    //         {
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.num_threads = stoi(arg, &pos);
-    //         }
-    //         else if (flag.find("--skip=") != std::string::npos)
-    //         {
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.skipSuites = arg;
-    //         }
-    //         else if (flag.find("--testonly=") != std::string::npos)
-    //         {
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.testOnlySuites = arg;
-    //         }
-    //         else if (flag.find("--timeout") != std::string::npos 
-    //             && flag.find('=') != std::string::npos)
-    //         {
-    //             if (flag.find("_ms=") != std::string::npos) {
-    //                 config.time_unit = "ms";
-    //             } else {
-    //                 config.time_unit = "sec";
-    //             }
-
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.timeout = std::stoi(arg, &pos);
-    //         } 
-    //         else if (flag == "--json") {
-    //             //get the next argument
-    //             std::getline(file, flag);
-    //             config.jsonFile = flag;
-    //         } 
-    //         else if (flag == "--junit") {
-    //             //get the next argument
-    //             std::getline(file, flag);
-    //             config.jUnitFile = flag;
-    //         } 
-    //         else if (flag.find("--truncatestdout=") != std::string::npos) {
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.stdoutSize = std::stoi(arg, &pos);
-    //         } 
-    //         else if (flag.find("--truncatestderr=") != std::string::npos) {
-    //             std::string arg = flag.substr(flag.find('=') + 1);
-    //             config.stderrSize = std::stoi(arg, &pos);
-    //         } 
-    //         else if (flag == "--truncate") {
-    //             config.stderrSize = 1024;
-    //             config.stdoutSize = 1024;
-    //         }
-    //         else if (flag == "--stream") {
-    //             config.stream = true;
-    //         }
-    //     }
-
-    //     return config;
-    // }
 
     const Config GetConfig(std::filesystem::path path)
     {
@@ -276,7 +205,7 @@ namespace tppCLI {
             {
                 config.verbosity = flag.substr(flag.find('=') + 1);
             }
-            else if (flag.find("--num_threads=") != std::string::npos)
+            else if (flag.find("--numthreads=") != std::string::npos)
             {
                 config.num_threads = std::stoi(flag.substr(flag.find('=') + 1), &pos);
             }
@@ -308,11 +237,11 @@ namespace tppCLI {
             {
                 file >> config.jUnitFile;
             }
-            else if (flag.find("--truncatestdout=") != std::string::npos)
+            else if (flag.find("--stdoutsize=") != std::string::npos)
             {
                 config.stdoutSize = std::stoi(flag.substr(flag.find('=') + 1), &pos);
             }
-            else if (flag.find("--truncatestderr=") != std::string::npos)
+            else if (flag.find("--stderrsize=") != std::string::npos)
             {
                 config.stderrSize = std::stoi(flag.substr(flag.find('=') + 1), &pos);
             }

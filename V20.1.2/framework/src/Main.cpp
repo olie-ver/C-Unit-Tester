@@ -26,12 +26,6 @@ int main(int argc, char** argv) {
     }
 #endif
 
-    // std::cout << "from framework:" << std::endl;
-    // for (int i = 0; i < argc; i++) {
-    //     std::cout << argv[i] << " ";
-    // }
-    // std::cout << std::endl;
-
     int num_threads = 1;
     int timeout = 0;
 
@@ -57,7 +51,7 @@ int main(int argc, char** argv) {
         {
             std::string arg = flag.substr(flag.find('=') + 1);
             verbFlag = getVerbFlag(arg);
-        } else if (flag.find("--num_threads=") != std::string::npos
+        } else if (flag.find("--numthreads=") != std::string::npos
             || flag.find("--threads=") != std::string::npos
             || flag.find("--t=") != std::string::npos)
         {
@@ -131,7 +125,7 @@ int main(int argc, char** argv) {
                 std::cerr << "Missing .xml file path after --junit/--xml flag" << std::endl;
                 return EXIT_FAILURE;
             }
-        } else if (flag.find("--stdoutSize=") != std::string::npos 
+        } else if (flag.find("--stdoutsize=") != std::string::npos 
             || flag.find("--stdout=") != std::string::npos)
         {
             std::string arg = flag.substr(flag.find('=') + 1);
@@ -150,7 +144,7 @@ int main(int argc, char** argv) {
                 std::cerr << "std::out_of_range::what(): " << ex.what() << '\n';
                 return EXIT_FAILURE;
             }
-        } else if (flag.find("--stderrSize=") != std::string::npos 
+        } else if (flag.find("--stderrsize=") != std::string::npos 
             || flag.find("--stderr=") != std::string::npos)
         {
             std::string arg = flag.substr(flag.find('=') + 1);

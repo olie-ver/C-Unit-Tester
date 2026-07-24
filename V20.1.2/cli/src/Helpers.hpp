@@ -18,6 +18,7 @@ namespace tppHelpers {
     );
 
     void generateCMake(
+        const std::filesystem::path& install_prefix,
         const std::filesystem::path& write_loc,
         const std::filesystem::path& cmake_template, 
         const std::vector<std::filesystem::path>& files

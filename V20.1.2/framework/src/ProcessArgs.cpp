@@ -60,14 +60,14 @@ void renderUsage(char* bad_flag) {
     std::cerr << "Usage: ./pathToExecutable --flags\n" << std::endl;
     std::cerr << "Supported flags:" << std::endl;
     std::cerr << "\tVerbosity: --v= or --verbosity=" << std::endl;
-    std::cerr << "\tThreads: --t= or --num_threads= or --threads=" << std::endl;
+    std::cerr << "\tThreads: --t= or --numthreads= or --threads=" << std::endl;
     std::cerr << "\tTimeout: --timeout= or --timeout_sec= or --timeout_ms=" << std::endl;
     std::cerr << "\tSkip Suites: --s= or --skip=" << std::endl;
     std::cerr << "\tTest Only Suites: --testonly= or --test_only= or --to= or t_o=\n" << std::endl;
     std::cerr << "\tJSON Output: --json PATH_TO_FILE" << std::endl;
     std::cerr << "\tXML Output: --junit PATH_TO_FILE or --xml PATH_TO_FILE" << std::endl;
-    std::cerr << "\tstdout output length: --stdoutSize= or --stdout=" << std::endl;
-    std::cerr << "\tstderr output length: --stderrSize= or --stderr=" << std::endl;
+    std::cerr << "\tstdout output length: --stdoutsize= or --stdout=" << std::endl;
+    std::cerr << "\tstderr output length: --stderrsize= or --stderr=" << std::endl;
     std::cerr << "\tstdout and stderr output length (1024 chars): --truncate" << std::endl;
     std::cerr << "\tStream Progress: --stream" << std::endl;
     std::cerr << "Supported verbosity flags: ";
