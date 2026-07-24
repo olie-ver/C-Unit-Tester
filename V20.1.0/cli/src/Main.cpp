@@ -23,18 +23,15 @@ int main(int argc, char** argv) {
         std::filesystem::copy_file(var / "default.conf", user_conf);
     }
 
-    //Get the config settings
-    tppCLI::Config settings = tppCLI::GetConfig(user_conf);
+    std::ifstream readConfig(user_conf);
+    std::stringstream configSettings;
+    configSettings << readConfig.rdbuf();
 
     if (argc == 1) {
         if (!std::filesystem::exists(user_exec)) {
             std::cout << "No tests to run" << std::endl;
             return EXIT_SUCCESS;
         }
-
-        std::ifstream readConfig(user_conf);
-        std::stringstream configSettings;
-        configSettings << readConfig.rdbuf();
 
         std::string cmd = user_exec.string() + " " + configSettings.str();
 
@@ -60,6 +57,8 @@ int main(int argc, char** argv) {
         }
 
         if (first_arg == "--diagnostics") {
+            //Get the config settings
+            const tppCLI::Config& settings = tppCLI::GetConfig(user_conf);
             tppHelpers::printDiagnostics(VERSION, installRoot, user_exec, settings);
 
             return EXIT_SUCCESS;
@@ -85,9 +84,15 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    std::string run_command = '\"' + user_exec.string() + '\"';
+    std::stringstream argStream;
 
-    // std::cout << "exec path: " << run_command << std::endl;
+    for (size_t i = 0; i < args.size(); i++) {
+        argStream << args[i] << " ";
+    }
+
+    //Run command is "user_exec" configSettings arguments
+    // arguments override any configSettings so it's all good to just add them in front
+    std::string run_command = '\"' + user_exec.string() + '\"' + " " + configSettings.str() + argStream.str();
 
     return std::system(run_command.c_str());
 }
