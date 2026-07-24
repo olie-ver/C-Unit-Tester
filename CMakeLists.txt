@@ -6,6 +6,8 @@ project (
     LANGUAGES CXX
 )
 
+include(CMakePackageConfigHelpers)
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -56,5 +58,35 @@ install(
 
 #Create and install empty directories for runtime
 install(DIRECTORY DESTINATION run)
-install(DIRECTORY DESTINATION run/build)
-install(DIRECTORY DESTINATION run/build/bin)
+install(DIRECTORY build DESTINATION run)
+install(DIRECTORY bin DESTINATION run/build)
+
+#install Test++ as a package
+install(
+    EXPORT testppTargets
+    FILE testppTargets.cmake
+    NAMESPACE testpp::
+    DESTINATION lib/cmake/testpp
+)
+
+#generate the package config
+configure_package_config_file(
+    cmake/testppConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/testppConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/testpp
+)
+
+#generate the version file
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/testppConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+#install them
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/testppConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/testppConfigVersion.cmake"
+    DESTINATION lib/cmake/testpp
+)

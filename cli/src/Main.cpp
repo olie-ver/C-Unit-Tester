@@ -18,6 +18,8 @@ int main(int argc, char** argv) {
     std::filesystem::path user_conf = run / "config.conf";
     std::filesystem::path cmake_template = var / "CMakeLists.txt.in";
 
+    std::filesystem::remove(run / "build" / "CMakeCache.txt");
+
     if (!std::filesystem::exists(user_conf)) {
         //If there isn't a configuration file, copy over the default 
         std::filesystem::copy_file(var / "default.conf", user_conf);
