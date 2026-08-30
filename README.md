@@ -1,107 +1,43 @@
-# C++ Unit Tester
-A C++ Unit Testing library I'm building to be used in my other projects
-because even though I know how to use someone else's library, I don't want to include
-every file in every project. I know I could probably just compile someone else's 
-into a static library and call it a day, but I want the learning experience as well. 
+# Test++
+Test++ is a header-only C++ unit testing library and framework. 
+It is available for download and installation on Mac, Windows, and Linux, 
+however, its development is done on Mac, and its usage in other operating 
+systems is largely untested. It is completely open source and free to use. 
+It is currently built using C++20, and usage with other languages/C++ standards 
+has not yet been tested.
 
-5/19/26
-TODO:
-Create a concept that detects mixed sign types and disallow comparisons unless the user opts out of it
-Create tests for failing an Assert test actually stops testing for a test suite
-Redo the documentation for after these changes are implemented
+# Installation
 
-5/18/26
-Refactored all tests in the V20.0.0 folder. Created a new meta test for failing with a message
+In order to use Test++ as a CLI tool, you will need CMake installed on your system.
+This CMake requirement is not present when you use Test++ as a library. 
 
-5/16/26
-Implemented from the list of tests to be implemented:
-7. All of, any of, none of (predicate testing)
+## Homebrew (Preferred)
+If you have a Mac, you can install Test++ via Homebrew.
 
-Total tests implemented:
-1. Same set/Not same set
-2. Ordered not equals/Unordered not equals
-3. Subset/Superset
-4. Strict subset
-5. Contains/Does not contain
-6. Container size, container empty/not empty
-7. All of, any of, none of (predicate testing)
-8. Float infinity/negative infinity
-9. String contains
-10. String starts/ends with
-11. Throws with message
+```bash
+brew trust olie-ver/testpp
+brew tap olie-ver/testpp
+brew install testpp
+```
+After this you can start using the testpp command immediately without needing to register the path. 
+To uninstall, run 
 
-As of now, my C++ unit tester is complete! Is it 100% done? No, but it is functional now.
-LinkedIn post time!!!!
+```bash
+brew uninstall testpp
+```
 
-5/14/25
-Implemented from the list of tests to be implemented:
-1. Same set/Not same set
-2. Ordered not equals/Unordered not equals
-3. Subset/Superset
-4. Strict subset
+## Manual Installation
 
-Total tests implemented:
-1. Same set/Not same set
-2. Ordered not equals/Unordered not equals
-3. Subset/Superset
-4. Strict subset
-5. Contains/Does not contain
-6. Container size, container empty/not empty
-8. Float infinity/negative infinity
-9. String contains
-10. String starts/ends with
-11. Throws with message
+In order to manually install Test++, go to the Downloads folder and download the V20.1.2.zip file.
+Extract the files. Open a new terminal inside the V20.1.2 folder and then run the following commands:
 
-Still need:
-7. All of, any of, none of (predicate testing)
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+sudo cmake --install build
+```
 
-5/13/26
-Implemented from the list of tests to be implemented:
-5. Contains/Does not contain
-6. Container size, container empty/not empty
-8. Float infinity/negative infinity
-11. Throws with message
-
-Total tests implemented:
-5. Contains/Does not contain
-6. Container size, container empty/not empty
-8. Float infinity/negative infinity
-9. String contains
-10. String starts/ends with
-11. Throws with message
-
-Still need:
-1. Same set/Not same set
-2. Ordered not equals/Unordered not equals
-3. Subset/Superset
-4. Strict subset
-7. All of, any of, none of (predicate testing)
-
-5/2/26
-Implemented from the previous entry:
-9. String contains
-10. String starts/ends with
-
-4/30/26
-Future tests that will be implemented:
-1. Same set/Not same set
-2. Ordered not equals/Unordered not equals
-3. Subset/Superset
-4. Strict subset
-5. Contains/Does not contain
-6. Container size, container empty/not empty
-7. All of, any of, none of (predicate testing)
-8. Float infinity/negative infinity
-9. String contains
-10. String starts/ends with
-11. Throws with message
-
-4/18/26
-I moved away from writing and compiling with C++17 in favor for C++20.
-
-4/16/26
-At the moment I will be writing and compiling with C++ 17, as seen with the v17.0.0 folder.
-However, I may eventually write and compile with a later version of C++ as a way of maintenance
-and keeping it modern.
-
-If you're feeling gutsy, you should use it in your projects and tell me what you think. Otherwise, just take a look around. Be sure to read the Documentation.md file in the v20.0.0 folder if you are thinking of using in your projects before downloading.
+Then to register the `testpp` command in your system, you can run:
+```bash
+echo 'export PATH="$HOME/testpp-install/bin:$PATH"' >> ~/.zshrc
+```
