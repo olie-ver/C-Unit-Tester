@@ -10,7 +10,7 @@ namespace tppCLI {
         Config config = GetConfig(path);
         size_t pos{};
 
-        for (size_t i = 2; i < argc; i++) {
+        for (int i = 2; i < argc; i++) {
             std::string flag(argv[i]);
             std::transform(flag.begin(), flag.end(), flag.begin(), [](unsigned char c) { return std::tolower(c); });
 
@@ -257,5 +257,25 @@ namespace tppCLI {
         }
 
         return config;
+    }
+
+    const CXX getCXX(const std::filesystem::path &path)
+    {
+        std::ifstream readCxx(path);
+        std::string line;
+
+        CXX cxx;
+
+        while (std::getline(readCxx, line))
+        {
+            std::istringstream iss(line);
+            if (line.find("Flags:") != std::string::npos) {
+                cxx.flags = line.substr(7);
+            } else if (line.find("Standard:") != std::string::npos) {
+                cxx.standard = line.substr(line.size() - 2);
+            }
+        }
+
+        return cxx;
     }
 }

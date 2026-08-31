@@ -10,11 +10,12 @@ namespace tppHelpers {
     void printDiagnostics(const char* VERSION, 
         const std::filesystem::path& installRoot, 
         const std::filesystem::path& user_exec,
+        const tppCLI::CXX& user_cxx,
         const tppCLI::Config& settings
     )
     {
-        std::cout << "Version: " << VERSION << '\n';
-        std::cout << "Installation Folder: " << installRoot << '\n';
+        std::cout << "Version: " << VERSION << "\n\n";
+        std::cout << "Installation Folder: " << installRoot << "\n\n";
 
         std::cout << "Test Executable Built: ";
 
@@ -22,8 +23,9 @@ namespace tppHelpers {
 
         if (user_exec_exists) {
             std::cout << "True\n";
+            std::cout << "Test Executable Path: " << user_exec.c_str() << "\n\n";
         } else {
-            std::cout << "False\n";
+            std::cout << "False\n\n";
         }
 
         std::cout << "Configurations:";
@@ -69,6 +71,9 @@ namespace tppHelpers {
             std::cout << settings.testOnlySuites;
         }
 
+        std::cout << "\n\ncxx_flags: " << user_cxx.flags;
+        std::cout << "\ncxx standard: " << "-std=c++" << user_cxx.standard;
+
         std::cout << std::endl;
     }
 
@@ -100,15 +105,56 @@ namespace tppHelpers {
         }
     }
 
+    void printHelp() {
+        std::cout << "help:\n";
+        std::cout << "commands:\n";
+        std::cout << "\ttestpp --help - prints out information on how to use Test++\n";
+        std::cout << "\ttestpp --version - prints out the version of Test++\n";
+        std::cout << "\ttestpp --diagnostics - prints our information about your version of Test++"
+                            " as well as your settings\n\n";
+
+        std::cout << "\ttestpp - runs the last built executable, if there is one\n";
+        std::cout << "\ttestpp [files/directories] - adds files to the generated executable and runs it\n";
+        std::cout << "\ttestpp [flags] - runs the last built executable under the specified flags\n";
+        std::cout << "\ttestpp [pattern] - a combination of the above two commands where [pattern] is"
+                                         " a set of files/directories and flags\n\n";
+
+        std::cout << "\ttestpp --reset - resets both your configuration and compiler flag settings\n";
+        std::cout << "\ttestpp --reset-flags - resets only your configuration settings\n";
+        std::cout << "\ttestpp --reset-cxx - resets only your compiler flag settings\n";
+
+        std::cout << "\ttestpp config [flags] - configures your Test++ settings\n";
+        std::cout << "\ttestpp cxx_flags [compiler_flags] - configures your Test++ compiler flags."
+                            "\n\t\tType them in as if you were passing them directly to the compiler\n\n";
+        
+        std::cout << "Supported [flags]:\n";
+        std::cout << "\tVerbosity: --v= or --verbosity=\n";
+        std::cout << "\tThreads: --t= or --numthreads= or --threads=\n";
+        std::cout << "\tTimeout: --timeout= or --timeout_sec= or --timeout_ms=\n";
+        std::cout << "\tSkip Suites: --s= or --skip=\n";
+        std::cout << "\tTest Only Suites: --testonly= or --test_only= or --to= or t_o=\n\n";
+        std::cout << "\tJSON Output: --json PATH_TO_FILE\n";
+        std::cout << "\tXML Output: --junit PATH_TO_FILE or --xml PATH_TO_FILE\n";
+        std::cout << "\tstdout output length: --stdoutsize= or --stdout=\n";
+        std::cout << "\tstderr output length: --stderrsize= or --stderr=\n";
+        std::cout << "\tstdout and stderr output length (1024 chars): --truncate\n";
+        std::cout << "\tStream Progress: --stream\n";
+        std::cout << "\nSuites being skipped must be separated by ',' with NO space in between\n";
+        std::cout << "\nSupported verbosity flags: default, minimum, passonly, failonly, failonlymin\n";
+    }
+
     void generateCMake(
         const std::filesystem::path& install_prefix,
         const std::filesystem::path& write_loc,
         const std::filesystem::path& cmake_template, 
-        const std::vector<std::filesystem::path>& files
+        const std::vector<std::filesystem::path>& files,
+        const tppCLI::CXX& cxxFlags
     ) 
     {
         const std::string installReplace = "@INSTALL_PREFIX@";
         const std::string replace = "@USER_SOURCES@";
+        const std::string cxxReplace = "@USER_CXX_FLAGS@";
+        const std::string stdReplace = "@CXX_STANDARD@";
 
         std::ifstream readCmakeTemplate(cmake_template);
         std::stringstream cmake;
@@ -123,12 +169,26 @@ namespace tppHelpers {
         generate_executable.replace(
             generate_executable.find(installReplace),
             installReplace.size(),
-            install_prefix.string());
+            install_prefix.string()
+        );
 
         generate_executable.replace(
             generate_executable.find(replace),
             replace.size(),
-            imploded.str());
+            imploded.str()
+        );
+
+        generate_executable.replace(
+            generate_executable.find(cxxReplace),
+            cxxReplace.size(),
+            cxxFlags.flags
+        );
+
+        generate_executable.replace(
+            generate_executable.find(stdReplace),
+            stdReplace.size(),
+            cxxFlags.standard
+        );
 
         std::ofstream out(write_loc);
         out << generate_executable;
@@ -136,7 +196,7 @@ namespace tppHelpers {
     }
 
     bool configureAndBuild(const std::filesystem::path& run) {    
-        std::string build_dir = (run / "build").string();
+        std::string build_dir = run.string();
 
         std::string configure = "cmake -S \"" + build_dir +  "\" -B \"" + build_dir + "\"";
 
