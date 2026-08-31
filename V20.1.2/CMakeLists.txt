@@ -6,18 +6,6 @@ project (
     LANGUAGES CXX
 )
 
-// Source - https://stackoverflow.com/a/41361741
-// Posted by Angew is no longer proud of SO, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-08-04, License - CC BY-SA 3.0
-
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-
 include(CMakePackageConfigHelpers)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
