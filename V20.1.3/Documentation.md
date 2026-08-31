@@ -1,8 +1,30 @@
-# C++ Unit Tester V20.0.4
+# C++ Unit Tester V20.1.3
 A C++ Unit Tester for C++20 written by Oliver Lie. Even as a more or less stable release, I still make no guarantees that future versions will work the same, and implementations could change.
 
 ### License/Conditions of Usage
-You may consider this code open-source to be downloaded, modified, and released for others under the condition that any other subsidiary code will keep these same conditions. This includes keeping the software free of charge. I also make no guarantees about correctness and the amount of bugs in this software. Don't sue me if it doesn't work :3
+This software is released under the MIT license.
+
+MIT License
+
+Copyright (c) 2026 Oliver A. Lie
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ## Table of Contents
 1. [Adding To Your Projects](#adding-to-your-projects)
@@ -197,26 +219,32 @@ You may consider this code open-source to be downloaded, modified, and released 
 ## Adding To Your Projects
 
 ### Installing
-If you want to use this as a standalone library, see [Compiling And Linking](#compiling-and-linking). In order to install, be inside the V20.0.0 folder and run these commands:
+If you want to use this as a standalone library, see [Compiling And Linking](#compiling-and-linking). In order to install, be inside the V20.1.3 folder and run these commands:
+
 ```
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 sudo cmake --install build
 ```
+
 This will install Test++ as a command line command you can use directly in the terminal. It has 3 ways to call it:
+
 ```
 testpp
 ```
+
 This command will run the last build made by Test++. If there is none, then it will say that there is nothing to run.
 
 ```
 testpp (files)
 ```
+
 This command will compile and run the passed in files. These files will be compiled by C++20 standards, so they must be compatible to be compiled with those standards. 
 
 ```
 testpp (directories)
 ```
+
 This command will compile and run the passed in directories. These files will be compiled by C++20 standards, so they must be compatible to be compiled with those standards. Only .cpp files will be compiled.
 
 The `testpp` command can also be passed in the same kind of flags as if it were an executable.
