@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(testpp_generated)
+
+list(PREPEND CMAKE_PREFIX_PATH "@INSTALL_PREFIX@")
+
+find_package(testpp REQUIRED)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+    ${CMAKE_BINARY_DIR}/bin
+)
+
+add_executable(testpp_generated
+    @USER_SOURCES@
+)
+
+set_target_properties(testpp_generated PROPERTIES
+    CXX_STANDARD @CXX_STANDARD@
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+)
+
+target_compile_options(testpp_generated PRIVATE
+    @USER_CXX_FLAGS@
+)
+
+target_link_libraries(
+    testpp_generated
+    PRIVATE
+        testpp::testpp_main
+)
